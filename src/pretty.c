@@ -156,6 +156,7 @@ void prettyEXP(EXP *e, int indent) {
             }
             break;
         case k_expressionKindWhileStatement:
+            autoIndent(indent);
             printf("while (");
             prettyEXP(e->val.whilestmt.expr, indent);
             printf(") ");
@@ -163,6 +164,7 @@ void prettyEXP(EXP *e, int indent) {
             printf("\n");
             autoIndent(indent);
             prettyEXP(e->val.whilestmt.bodyblock, indent + 1);
+            autoIndent(indent);
             printf("}");
             printf("\n");
             break;

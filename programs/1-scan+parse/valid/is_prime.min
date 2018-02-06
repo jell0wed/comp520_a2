@@ -19,10 +19,4 @@ if n == 2 {
             i = i + 1;
         }
     }
-
-    if is_prime == -1 {
-        print "is prime";
-    } else {
-        print "is not prime";
-    }
 }
