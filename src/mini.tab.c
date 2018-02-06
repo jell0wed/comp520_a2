@@ -1974,7 +1974,7 @@ int main(int argc, char* argv[]) {
 	} else if (strcmp("parse", command) == 0) {
 		if(yyparse() == 0) {
 			//printf("OK");
-			prettyEXP(root);
+			prettyEXP(root, 0);
 			return 0;
 		}
 	}
