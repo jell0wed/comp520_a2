@@ -26,8 +26,8 @@ ALLOWED_DATATYPES (float|boolean|int|string)
 \|\|                        { if (g_token) { printf("tOR\n"); } tOR; } 
 !                           { if (g_token) { printf("tNOT\n"); }return tNOT; }
 
-\(                          { if (g_token) { printf("tLPAREN\n"); } return tLPAREN; }
-\)                          { if (g_token) { printf("tRPAREN\n"); } return tRPAREN; }
+\(                          ;
+\)                          ;
 
 read                        { if (g_token) { printf("tREAD\n"); } return tREAD; }
 print                       { if (g_token) { printf("tPRINT\n"); } return tPRINT; }

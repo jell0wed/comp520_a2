@@ -7,6 +7,7 @@ typedef struct EXP EXP;
 struct EXP {
     enum ExpressionKind kind;
     enum ExpressionFamily family;
+    int lineno;
     union {
         char *identifer;
         int intLiteral;
@@ -31,25 +32,25 @@ struct EXP {
     } val;
 };
 
-EXP *makeEXP_intLiteral(int intLiteral);
-EXP *makeEXP_floatLiteral(float floatLiteral);
-EXP *makeEXP_boolLiteral(int boolLiteral);
-EXP *makeEXP_stringLiteral(char* stringLiteral);
-EXP *makeEXP_identifier(char* identifier);
+EXP *makeEXP_intLiteral(int intLiteral, int lineno);
+EXP *makeEXP_floatLiteral(float floatLiteral, int lineno);
+EXP *makeEXP_boolLiteral(int boolLiteral, int lineno);
+EXP *makeEXP_stringLiteral(char* stringLiteral, int lineno);
+EXP *makeEXP_identifier(char* identifier, int lineno);
 
-EXP *makeEXP_binary(enum ExpressionKind k, EXP* lhs, EXP* rhs);
-EXP *makeEXP_negate(EXP* e);
+EXP *makeEXP_binary(enum ExpressionKind k, EXP* lhs, EXP* rhs, int lineno);
+EXP *makeEXP_negate(EXP* e, int lineno);
 
-EXP *makeEXP_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val);
-EXP *makeEXP_varDeclarationList(EXP* vardec, EXP* next);
+EXP *makeEXP_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val, int lineno);
+EXP *makeEXP_varDeclarationList(EXP* vardec, EXP* next, int lineno);
 
-EXP *makeEXP_readStatement(EXP* identifier);
-EXP *makeEXP_writeStatement(EXP* identifier);
-EXP *makeEXP_assignmentStatement(EXP* identifier, EXP* value);
-EXP *makeEXP_ifElseStatement(EXP* expr, EXP* bodyblock, EXP* elseblock);
-EXP *makeEXP_whileStatement(EXP* expr, EXP* bodyblock);
+EXP *makeEXP_readStatement(EXP* identifier, int lineno);
+EXP *makeEXP_printStatement(EXP* identifier, int lineno);
+EXP *makeEXP_assignmentStatement(EXP* identifier, EXP* value, int lineno);
+EXP *makeEXP_ifElseStatement(EXP* expr, EXP* bodyblock, EXP* elseblock, int lineno);
+EXP *makeEXP_whileStatement(EXP* expr, EXP* bodyblock, int lineno);
 
-EXP *makeEXP_statementList(EXP* stmt, EXP* next);
+EXP *makeEXP_statementList(EXP* stmt, EXP* next, int lineno);
 
-EXP *makeEXP_programBody(EXP* var_decl_list, EXP* stmt_list);
+EXP *makeEXP_programBody(EXP* var_decl_list, EXP* stmt_list, int lineno);
 #endif

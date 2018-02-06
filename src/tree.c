@@ -1,6 +1,6 @@
 #include "tree.h"
 
-EXP *makeEXP_intLiteral(int intLiteral) {
+EXP *makeEXP_intLiteral(int intLiteral, int lineno) {
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Literal;
     e->kind = k_expressionKindIntLiteral;
@@ -8,7 +8,7 @@ EXP *makeEXP_intLiteral(int intLiteral) {
     return e;
 }
 
-EXP *makeEXP_floatLiteral(float floatLiteral) {
+EXP *makeEXP_floatLiteral(float floatLiteral, int lineno) {
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Literal;
     e->kind = k_expressionKindFloatLiteral;
@@ -16,7 +16,7 @@ EXP *makeEXP_floatLiteral(float floatLiteral) {
     return e;
 }
 
-EXP *makeEXP_stringLiteral(char* stringLiteral) {
+EXP *makeEXP_stringLiteral(char* stringLiteral, int lineno) {
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Literal;
     e->kind = k_expressionKindStringLiteral;
@@ -24,7 +24,7 @@ EXP *makeEXP_stringLiteral(char* stringLiteral) {
     return e;
 }
 
-EXP *makeEXP_boolLiteral(int boolLiteral) {
+EXP *makeEXP_boolLiteral(int boolLiteral, int lineno) {
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Literal;
     e->kind = k_expressionKindBooleanLiteral;
@@ -32,7 +32,7 @@ EXP *makeEXP_boolLiteral(int boolLiteral) {
     return e;
 }
 
-EXP *makeEXP_identifier(char* identifier) {
+EXP *makeEXP_identifier(char* identifier, int lineno) {
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Literal;
     e->kind = k_expressionKindIdentifier;
@@ -40,7 +40,7 @@ EXP *makeEXP_identifier(char* identifier) {
     return e;
 }
 
-EXP *makeEXP_binary(enum ExpressionKind k, EXP* lhs, EXP* rhs) {
+EXP *makeEXP_binary(enum ExpressionKind k, EXP* lhs, EXP* rhs, int lineno) {
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Expression;
     e->kind = k;
@@ -49,7 +49,7 @@ EXP *makeEXP_binary(enum ExpressionKind k, EXP* lhs, EXP* rhs) {
     return e;
 }
 
-EXP *makeEXP_negate(EXP* ref) {
+EXP *makeEXP_negate(EXP* ref, int lineno) {
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Expression;
     e->kind = k_expressionKindNegate;
@@ -57,7 +57,7 @@ EXP *makeEXP_negate(EXP* ref) {
     return e;
 }
 
-EXP *makeEXP_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val) {
+EXP *makeEXP_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val, int lineno) {
     // make sure identifier is an identifier
     if(identifier->kind != k_expressionKindIdentifier) {
         // signal error
@@ -73,7 +73,7 @@ EXP *makeEXP_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val) {
     return e;
 }
 
-EXP *makeEXP_varDeclarationList(EXP* vardec, EXP* next) {
+EXP *makeEXP_varDeclarationList(EXP* vardec, EXP* next, int lineno) {
     // make sure vardec is a variable declaration
     if(vardec->kind != k_expressionKindVarDecl) {
         // signal error
@@ -92,7 +92,7 @@ EXP *makeEXP_varDeclarationList(EXP* vardec, EXP* next) {
     return e;
 }
 
-EXP *makeEXP_readStatement(EXP* identifier) {
+EXP *makeEXP_readStatement(EXP* identifier, int lineno) {
     if(identifier->kind != k_expressionKindIdentifier) {
         // signal error
     }
@@ -104,19 +104,19 @@ EXP *makeEXP_readStatement(EXP* identifier) {
     return e;
 }
 
-EXP *makeEXP_writeStatement(EXP* identifier) {
+EXP *makeEXP_printStatement(EXP* identifier, int lineno) {
     if(identifier->kind != k_expressionKindIdentifier) {
         // signal error
     }
 
     EXP *e = malloc(sizeof(EXP));
     e->family = ef_Statements;
-    e->kind = k_expressionKindWriteStatement;
+    e->kind = k_expressionKindPrintStatement;
     e->val.unary_stmt.identifier = identifier;
     return e;
 }
 
-EXP *makeEXP_assignmentStatement(EXP* identifier, EXP* value) {
+EXP *makeEXP_assignmentStatement(EXP* identifier, EXP* value, int lineno) {
     if(identifier->kind != k_expressionKindIdentifier) {
         // signal error
     }
@@ -128,7 +128,7 @@ EXP *makeEXP_assignmentStatement(EXP* identifier, EXP* value) {
     return e;
 }
 
-EXP *makeEXP_statementList(EXP* stmt, EXP* next) {
+EXP *makeEXP_statementList(EXP* stmt, EXP* next, int lineno) {
     // make sure vardec is a variable declaration
     if(stmt->kind != k_expressionKindVarDecl) {
         // signal error
@@ -147,7 +147,7 @@ EXP *makeEXP_statementList(EXP* stmt, EXP* next) {
     return e;
 }
 
-EXP *makeEXP_ifElseStatement(EXP* expr, EXP* bodyblock, EXP* elseblock) {
+EXP *makeEXP_ifElseStatement(EXP* expr, EXP* bodyblock, EXP* elseblock, int lineno) {
     if(expr->family != ef_Expression) {
         // signal  error
     }
@@ -172,7 +172,7 @@ EXP *makeEXP_ifElseStatement(EXP* expr, EXP* bodyblock, EXP* elseblock) {
     return e;
 }
 
-EXP *makeEXP_whileStatement(EXP* expr, EXP* bodyblock) {
+EXP *makeEXP_whileStatement(EXP* expr, EXP* bodyblock, int lineno) {
     if(expr->family != ef_Expression) {
         // signal  error
     }
@@ -190,7 +190,7 @@ EXP *makeEXP_whileStatement(EXP* expr, EXP* bodyblock) {
     return e;
 }
 
-EXP *makeEXP_programBody(EXP* var_decl_list, EXP* stmt_list) {
+EXP *makeEXP_programBody(EXP* var_decl_list, EXP* stmt_list, int lineno) {
     if(stmt_list->family != ef_Statements) {
         // signal error
     }

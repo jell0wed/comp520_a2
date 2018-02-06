@@ -56,7 +56,7 @@
 #define YYPURE 0
 
 /* Using locations.  */
-#define YYLSP_NEEDED 0
+#define YYLSP_NEEDED 1
 
 
 
@@ -139,13 +139,17 @@
 #line 1 "mini.y"
 
 #include <stdio.h>
+extern int yylineno;
 void yyerror(const char *s) { 
-	fprintf(stderr, "Error: %s\n", s);
+	fprintf(stderr, "Error: (line %d) %s\n", yylineno, s);
 	exit(1);
 }
 
 #include "types.h"
 #include "tree.h"
+#include "pretty.h"
+
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 
 EXP *root;
 
@@ -160,7 +164,7 @@ EXP *root;
 # undef YYERROR_VERBOSE
 # define YYERROR_VERBOSE 1
 #else
-# define YYERROR_VERBOSE 0
+# define YYERROR_VERBOSE 1
 #endif
 
 /* Enabling the token table.  */
@@ -170,7 +174,7 @@ EXP *root;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 15 "mini.y"
+#line 20 "mini.y"
 {
 	int intval;
 	float floatval;
@@ -181,20 +185,32 @@ typedef union YYSTYPE
 	struct EXP *exp;
 }
 /* Line 193 of yacc.c.  */
-#line 185 "mini.tab.c"
+#line 189 "mini.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
 
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+typedef struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+} YYLTYPE;
+# define yyltype YYLTYPE /* obsolescent; will be withdrawn */
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
+#endif
 
 
 /* Copy the second part of user declarations.  */
 
 
 /* Line 216 of yacc.c.  */
-#line 198 "mini.tab.c"
+#line 214 "mini.tab.c"
 
 #ifdef short
 # undef short
@@ -352,14 +368,16 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+	 || (defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL \
+	     && defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
   yytype_int16 yyss;
   YYSTYPE yyvs;
-  };
+    YYLTYPE yyls;
+};
 
 /* The size of the maximum gap between one aligned stack and the next.  */
 # define YYSTACK_GAP_MAXIMUM (sizeof (union yyalloc) - 1)
@@ -367,8 +385,8 @@ union yyalloc
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
 # define YYSTACK_BYTES(N) \
-     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE)) \
-      + YYSTACK_GAP_MAXIMUM)
+     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE) + sizeof (YYLTYPE)) \
+      + 2 * YYSTACK_GAP_MAXIMUM)
 
 /* Copy COUNT objects from FROM to TO.  The source and destination do
    not overlap.  */
@@ -497,11 +515,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    47,    47,    49,    50,    54,    55,    59,    60,    61,
-      62,    66,    67,    71,    72,    73,    74,    75,    76,    77,
-      81,    82,    83,    84,    85,    88,    89,    93,    94,    95,
-      96,   100,   101,   102,   103,   105,   106,   108,   109,   113,
-     114,   115
+       0,    52,    52,    54,    55,    59,    60,    64,    65,    66,
+      67,    71,    72,    76,    77,    78,    79,    80,    81,    82,
+      86,    87,    88,    89,    90,    93,    94,    98,    99,   100,
+     101,   105,   106,   107,   108,   110,   111,   113,   114,   118,
+     119,   120
 };
 #endif
 
@@ -789,7 +807,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value); \
+		  Type, Value, Location); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -803,17 +821,19 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    YYLTYPE const * const yylocationp;
 #endif
 {
   if (!yyvaluep)
     return;
+  YYUSE (yylocationp);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -835,13 +855,14 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep)
+yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    YYLTYPE const * const yylocationp;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -849,7 +870,9 @@ yy_symbol_print (yyoutput, yytype, yyvaluep)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
+  YY_LOCATION_PRINT (yyoutput, *yylocationp);
+  YYFPRINTF (yyoutput, ": ");
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -889,11 +912,12 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
+yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule)
+yy_reduce_print (yyvsp, yylsp, yyrule)
     YYSTYPE *yyvsp;
+    YYLTYPE *yylsp;
     int yyrule;
 #endif
 {
@@ -908,7 +932,7 @@ yy_reduce_print (yyvsp, yyrule)
       fprintf (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       );
+		       , &(yylsp[(yyi + 1) - (yynrhs)])		       );
       fprintf (stderr, "\n");
     }
 }
@@ -916,7 +940,7 @@ yy_reduce_print (yyvsp, yyrule)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule); \
+    yy_reduce_print (yyvsp, yylsp, Rule); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1167,16 +1191,18 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep)
+yydestruct (yymsg, yytype, yyvaluep, yylocationp)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
+    YYLTYPE *yylocationp;
 #endif
 {
   YYUSE (yyvaluep);
+  YYUSE (yylocationp);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -1217,6 +1243,8 @@ YYSTYPE yylval;
 
 /* Number of syntax errors so far.  */
 int yynerrs;
+/* Location data for the look-ahead symbol.  */
+YYLTYPE yylloc;
 
 
 
@@ -1279,16 +1307,21 @@ yyparse ()
   YYSTYPE *yyvs = yyvsa;
   YYSTYPE *yyvsp;
 
+  /* The location stack.  */
+  YYLTYPE yylsa[YYINITDEPTH];
+  YYLTYPE *yyls = yylsa;
+  YYLTYPE *yylsp;
+  /* The locations where the error started and ended.  */
+  YYLTYPE yyerror_range[2];
 
-
-#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N))
+#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
 
   YYSIZE_T yystacksize = YYINITDEPTH;
 
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
-
+  YYLTYPE yyloc;
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
@@ -1308,6 +1341,12 @@ yyparse ()
 
   yyssp = yyss;
   yyvsp = yyvs;
+  yylsp = yyls;
+#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+  /* Initialize the default location before parsing starts.  */
+  yylloc.first_line   = yylloc.last_line   = 1;
+  yylloc.first_column = yylloc.last_column = 0;
+#endif
 
   goto yysetstate;
 
@@ -1334,7 +1373,7 @@ yyparse ()
 	   memory.  */
 	YYSTYPE *yyvs1 = yyvs;
 	yytype_int16 *yyss1 = yyss;
-
+	YYLTYPE *yyls1 = yyls;
 
 	/* Each stack pointer address is followed by the size of the
 	   data in use in that stack, in bytes.  This used to be a
@@ -1343,9 +1382,9 @@ yyparse ()
 	yyoverflow (YY_("memory exhausted"),
 		    &yyss1, yysize * sizeof (*yyssp),
 		    &yyvs1, yysize * sizeof (*yyvsp),
-
+		    &yyls1, yysize * sizeof (*yylsp),
 		    &yystacksize);
-
+	yyls = yyls1;
 	yyss = yyss1;
 	yyvs = yyvs1;
       }
@@ -1368,7 +1407,7 @@ yyparse ()
 	  goto yyexhaustedlab;
 	YYSTACK_RELOCATE (yyss);
 	YYSTACK_RELOCATE (yyvs);
-
+	YYSTACK_RELOCATE (yyls);
 #  undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
 	  YYSTACK_FREE (yyss1);
@@ -1378,7 +1417,7 @@ yyparse ()
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
-
+      yylsp = yyls + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
 		  (unsigned long int) yystacksize));
@@ -1455,7 +1494,7 @@ yybackup:
 
   yystate = yyn;
   *++yyvsp = yylval;
-
+  *++yylsp = yylloc;
   goto yynewstate;
 
 
@@ -1486,208 +1525,209 @@ yyreduce:
      GCC warning that YYVAL may be used uninitialized.  */
   yyval = yyvsp[1-yylen];
 
-
+  /* Default location.  */
+  YYLLOC_DEFAULT (yyloc, (yylsp - yylen), yylen);
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
         case 2:
-#line 47 "mini.y"
+#line 52 "mini.y"
     { root = (yyvsp[(1) - (1)].exp); ;}
     break;
 
   case 3:
-#line 49 "mini.y"
-    { (yyval.exp) = makeEXP_programBody((yyvsp[(1) - (2)].exp), (yyvsp[(2) - (2)].exp)); ;}
+#line 54 "mini.y"
+    { (yyval.exp) = makeEXP_programBody((yyvsp[(1) - (2)].exp), (yyvsp[(2) - (2)].exp), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 4:
-#line 50 "mini.y"
-    { (yyval.exp) = makeEXP_programBody(0, (yyvsp[(1) - (1)].exp)); ;}
+#line 55 "mini.y"
+    { (yyval.exp) = makeEXP_programBody(0, (yyvsp[(1) - (1)].exp), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 5:
-#line 54 "mini.y"
-    { (yyval.exp) = makeEXP_varDeclarationList((yyvsp[(2) - (2)].exp), (yyvsp[(1) - (2)].exp)); ;}
+#line 59 "mini.y"
+    { (yyval.exp) = makeEXP_varDeclarationList((yyvsp[(2) - (2)].exp), (yyvsp[(1) - (2)].exp), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 6:
-#line 55 "mini.y"
+#line 60 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
   case 7:
-#line 59 "mini.y"
-    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeInteger, (yyvsp[(5) - (6)].exp)); ;}
+#line 64 "mini.y"
+    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeInteger, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 8:
-#line 60 "mini.y"
-    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeFloat, (yyvsp[(5) - (6)].exp)); ;}
+#line 65 "mini.y"
+    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeFloat, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 9:
-#line 61 "mini.y"
-    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeBool, (yyvsp[(5) - (6)].exp)); ;}
+#line 66 "mini.y"
+    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeBool, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 10:
-#line 62 "mini.y"
-    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeString, (yyvsp[(5) - (6)].exp)); ;}
+#line 67 "mini.y"
+    { (yyval.exp) = makeEXP_varDeclaration((yyvsp[(2) - (6)].exp), t_typeString, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 11:
-#line 66 "mini.y"
-    { (yyval.exp) = makeEXP_statementList((yyvsp[(2) - (2)].exp), (yyvsp[(1) - (2)].exp)); ;}
+#line 71 "mini.y"
+    { (yyval.exp) = makeEXP_statementList((yyvsp[(2) - (2)].exp), (yyvsp[(1) - (2)].exp), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 12:
-#line 67 "mini.y"
+#line 72 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
   case 13:
-#line 71 "mini.y"
-    { (yyval.exp) = makeEXP_readStatement((yyvsp[(2) - (3)].exp)); ;}
+#line 76 "mini.y"
+    { (yyval.exp) = makeEXP_readStatement((yyvsp[(2) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 14:
-#line 72 "mini.y"
-    { (yyval.exp) = makeEXP_writeStatement((yyvsp[(2) - (3)].exp)); ;}
+#line 77 "mini.y"
+    { (yyval.exp) = makeEXP_printStatement((yyvsp[(2) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 15:
-#line 73 "mini.y"
-    { (yyval.exp) = makeEXP_assignmentStatement((yyvsp[(1) - (4)].exp) , (yyvsp[(3) - (4)].exp)); ;}
+#line 78 "mini.y"
+    { (yyval.exp) = makeEXP_assignmentStatement((yyvsp[(1) - (4)].exp) , (yyvsp[(3) - (4)].exp), (yylsp[(1) - (4)]).first_line); ;}
     break;
 
   case 16:
-#line 74 "mini.y"
-    { (yyval.exp) = makeEXP_assignmentStatement((yyvsp[(1) - (4)].exp) , (yyvsp[(3) - (4)].exp)); ;}
+#line 79 "mini.y"
+    { (yyval.exp) = makeEXP_assignmentStatement((yyvsp[(1) - (4)].exp) , (yyvsp[(3) - (4)].exp), (yylsp[(1) - (4)]).first_line); ;}
     break;
 
   case 17:
-#line 75 "mini.y"
-    { (yyval.exp) = makeEXP_ifElseStatement((yyvsp[(2) - (5)].exp), (yyvsp[(4) - (5)].exp), 0); ;}
+#line 80 "mini.y"
+    { (yyval.exp) = makeEXP_ifElseStatement((yyvsp[(2) - (5)].exp), (yyvsp[(4) - (5)].exp), 0, (yylsp[(1) - (5)]).first_line); ;}
     break;
 
   case 18:
-#line 76 "mini.y"
-    { (yyval.exp) = makeEXP_ifElseStatement((yyvsp[(2) - (9)].exp), (yyvsp[(4) - (9)].exp), (yyvsp[(8) - (9)].exp)); ;}
+#line 81 "mini.y"
+    { (yyval.exp) = makeEXP_ifElseStatement((yyvsp[(2) - (9)].exp), (yyvsp[(4) - (9)].exp), (yyvsp[(8) - (9)].exp), (yylsp[(1) - (9)]).first_line); ;}
     break;
 
   case 19:
-#line 77 "mini.y"
-    { (yyval.exp) = makeEXP_whileStatement((yyvsp[(2) - (5)].exp), (yyvsp[(4) - (5)].exp)); ;}
+#line 82 "mini.y"
+    { (yyval.exp) = makeEXP_whileStatement((yyvsp[(2) - (5)].exp), (yyvsp[(4) - (5)].exp), (yylsp[(1) - (5)]).first_line); ;}
     break;
 
   case 20:
-#line 81 "mini.y"
+#line 86 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
   case 21:
-#line 82 "mini.y"
+#line 87 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
   case 22:
-#line 83 "mini.y"
+#line 88 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
   case 23:
-#line 84 "mini.y"
+#line 89 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
   case 24:
-#line 85 "mini.y"
+#line 90 "mini.y"
     { (yyval.exp) = (yyvsp[(2) - (3)].exp); ;}
     break;
 
   case 26:
-#line 89 "mini.y"
-    { (yyval.exp) = makeEXP_identifier((yyvsp[(1) - (1)].identifierval)); ;}
+#line 94 "mini.y"
+    { (yyval.exp) = makeEXP_identifier((yyvsp[(1) - (1)].identifierval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 27:
-#line 93 "mini.y"
-    { (yyval.exp) = makeEXP_intLiteral((yyvsp[(1) - (1)].intval)); ;}
+#line 98 "mini.y"
+    { (yyval.exp) = makeEXP_intLiteral((yyvsp[(1) - (1)].intval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 28:
-#line 94 "mini.y"
-    { (yyval.exp) = makeEXP_floatLiteral((yyvsp[(1) - (1)].floatval)); ;}
+#line 99 "mini.y"
+    { (yyval.exp) = makeEXP_floatLiteral((yyvsp[(1) - (1)].floatval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 29:
-#line 95 "mini.y"
-    { (yyval.exp) = makeEXP_boolLiteral((yyvsp[(1) - (1)].boolval)); ;}
+#line 100 "mini.y"
+    { (yyval.exp) = makeEXP_boolLiteral((yyvsp[(1) - (1)].boolval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 30:
-#line 96 "mini.y"
-    { (yyval.exp) = makeEXP_stringLiteral((yyvsp[(1) - (1)].stringval)); ;}
+#line 101 "mini.y"
+    { (yyval.exp) = makeEXP_stringLiteral((yyvsp[(1) - (1)].stringval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 31:
-#line 100 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindAddition, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 105 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindAddition, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 32:
-#line 101 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindSubtraction, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 106 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindSubtraction, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 33:
-#line 102 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindMultiplication, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 107 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindMultiplication, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 34:
-#line 103 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindDivision, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 108 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindDivision, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 35:
-#line 105 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindEquals, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 110 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindEquals, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 36:
-#line 106 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindNotEquals, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 111 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindNotEquals, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 37:
-#line 108 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindLogicalAnd, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 113 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindLogicalAnd, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 38:
-#line 109 "mini.y"
-    { (yyval.exp) = makeEXP_binary(k_expressionKindLogicalOr, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp)); ;}
+#line 114 "mini.y"
+    { (yyval.exp) = makeEXP_binary(k_expressionKindLogicalOr, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 39:
-#line 113 "mini.y"
-    { (yyval.exp) = makeEXP_negate((yyvsp[(2) - (2)].exp)); ;}
+#line 118 "mini.y"
+    { (yyval.exp) = makeEXP_negate((yyvsp[(2) - (2)].exp), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 40:
-#line 114 "mini.y"
-    { (yyval.exp) = makeEXP_intLiteral((yyvsp[(2) - (2)].intval) * -1); ;}
+#line 119 "mini.y"
+    { (yyval.exp) = makeEXP_intLiteral((yyvsp[(2) - (2)].intval) * -1, (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 41:
-#line 115 "mini.y"
-    { (yyval.exp) = makeEXP_intLiteral((yyvsp[(2) - (2)].floatval) * -1.0); ;}
+#line 120 "mini.y"
+    { (yyval.exp) = makeEXP_intLiteral((yyvsp[(2) - (2)].floatval) * -1.0, (yylsp[(1) - (2)]).first_line); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1691 "mini.tab.c"
+#line 1731 "mini.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1697,7 +1737,7 @@ yyreduce:
   YY_STACK_PRINT (yyss, yyssp);
 
   *++yyvsp = yyval;
-
+  *++yylsp = yyloc;
 
   /* Now `shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
@@ -1759,7 +1799,7 @@ yyerrlab:
 #endif
     }
 
-
+  yyerror_range[0] = yylloc;
 
   if (yyerrstatus == 3)
     {
@@ -1775,7 +1815,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval);
+		      yytoken, &yylval, &yylloc);
 	  yychar = YYEMPTY;
 	}
     }
@@ -1796,6 +1836,7 @@ yyerrorlab:
   if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
 
+  yyerror_range[0] = yylsp[1-yylen];
   /* Do not reclaim the symbols of the rule which action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
@@ -1829,9 +1870,9 @@ yyerrlab1:
       if (yyssp == yyss)
 	YYABORT;
 
-
+      yyerror_range[0] = *yylsp;
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp);
+		  yystos[yystate], yyvsp, yylsp);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1842,6 +1883,11 @@ yyerrlab1:
 
   *++yyvsp = yylval;
 
+  yyerror_range[1] = yylloc;
+  /* Using YYLLOC is tempting, but would change the location of
+     the look-ahead.  YYLOC is available though.  */
+  YYLLOC_DEFAULT (yyloc, (yyerror_range - 1), 2);
+  *++yylsp = yyloc;
 
   /* Shift the error token.  */
   YY_SYMBOL_PRINT ("Shifting", yystos[yyn], yyvsp, yylsp);
@@ -1877,7 +1923,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEOF && yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval);
+		 yytoken, &yylval, &yylloc);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -1885,7 +1931,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp);
+		  yystos[*yyssp], yyvsp, yylsp);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1901,7 +1947,7 @@ yyreturn:
 }
 
 
-#line 117 "mini.y"
+#line 122 "mini.y"
 
 
 int g_token;
@@ -1927,7 +1973,8 @@ int main(int argc, char* argv[]) {
 		return 0;
 	} else if (strcmp("parse", command) == 0) {
 		if(yyparse() == 0) {
-			printf("OK");
+			//printf("OK");
+			prettyEXP(root);
 			return 0;
 		}
 	}

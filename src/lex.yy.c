@@ -867,12 +867,12 @@ YY_RULE_SETUP
 case 16:
 YY_RULE_SETUP
 #line 29 "mini.l"
-{ if (g_token) { printf("tLPAREN\n"); } return tLPAREN; }
+;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 30 "mini.l"
-{ if (g_token) { printf("tRPAREN\n"); } return tRPAREN; }
+;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP

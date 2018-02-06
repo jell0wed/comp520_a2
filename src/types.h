@@ -38,7 +38,7 @@ enum ExpressionKind {
     k_expressionKindVarDeclarationList,
 
     k_expressionKindReadStatement,
-    k_expressionKindWriteStatement,
+    k_expressionKindPrintStatement,
     k_expressionKindAssignmentStatement,
     k_expressionKindIfElseStatement,
     k_expressionKindWhileStatement,

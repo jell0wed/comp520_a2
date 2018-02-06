@@ -1,16 +1,21 @@
 %{
 #include <stdio.h>
+extern int yylineno;
 void yyerror(const char *s) { 
-	fprintf(stderr, "Error: %s\n", s);
+	fprintf(stderr, "Error: (line %d) %s\n", yylineno, s);
 	exit(1);
 }
 
 #include "types.h"
 #include "tree.h"
+#include "pretty.h"
+
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 
 EXP *root;
 %}
-
+%locations
+%error-verbose
 %token-table
 %union {
 	int intval;
@@ -46,35 +51,35 @@ EXP *root;
 %%
 program: mini { root = $1; }
 mini:
-	  var_dec_list stmt_list { $$ = makeEXP_programBody($1, $2); }
-	| stmt_list { $$ = makeEXP_programBody(0, $1); }
+	  var_dec_list stmt_list { $$ = makeEXP_programBody($1, $2, @1.first_line); }
+	| stmt_list { $$ = makeEXP_programBody(0, $1, @1.first_line); }
 ;
 
 var_dec_list:
-	  var_dec_list var_dec { $$ = makeEXP_varDeclarationList($2, $1); }
+	  var_dec_list var_dec { $$ = makeEXP_varDeclarationList($2, $1, @1.first_line); }
 	| var_dec { $$ = $1; }
 ;
 
 var_dec:
-	  tVARDECL identifier tTINTEGER tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeInteger, $5); }
-	| tVARDECL identifier tTFLOAT tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeFloat, $5); }
-	| tVARDECL identifier tTBOOLEAN tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeBool, $5); }
-	| tVARDECL identifier tTSTRING tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeString, $5); }
+	  tVARDECL identifier tTINTEGER tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeInteger, $5, @1.first_line); }
+	| tVARDECL identifier tTFLOAT tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeFloat, $5, @1.first_line); }
+	| tVARDECL identifier tTBOOLEAN tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeBool, $5, @1.first_line); }
+	| tVARDECL identifier tTSTRING tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeString, $5, @1.first_line); }
 ;
 
 stmt_list:
-	  stmt_list stmt { $$ = makeEXP_statementList($2, $1); }
+	  stmt_list stmt { $$ = makeEXP_statementList($2, $1, @1.first_line); }
 	| stmt { $$ = $1; }
 ;
 
 stmt:
-	  tREAD identifier tSEMICOLON { $$ = makeEXP_readStatement($2); }
-	| tPRINT expr tSEMICOLON { $$ = makeEXP_writeStatement($2); }
-	| identifier tASSIGN expr tSEMICOLON { $$ = makeEXP_assignmentStatement($1 , $3); }
-	| identifier tASSIGN litteral tSEMICOLON { $$ = makeEXP_assignmentStatement($1 , $3); }
-	| tIF expr tBEGIN stmt_list tEND { $$ = makeEXP_ifElseStatement($2, $4, 0); }
-	| tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND { $$ = makeEXP_ifElseStatement($2, $4, $8); }
-	| tWHILE expr tBEGIN stmt_list tEND { $$ = makeEXP_whileStatement($2, $4); }
+	  tREAD identifier tSEMICOLON { $$ = makeEXP_readStatement($2, @1.first_line); }
+	| tPRINT expr tSEMICOLON { $$ = makeEXP_printStatement($2, @1.first_line); }
+	| identifier tASSIGN expr tSEMICOLON { $$ = makeEXP_assignmentStatement($1 , $3, @1.first_line); }
+	| identifier tASSIGN litteral tSEMICOLON { $$ = makeEXP_assignmentStatement($1 , $3, @1.first_line); }
+	| tIF expr tBEGIN stmt_list tEND { $$ = makeEXP_ifElseStatement($2, $4, 0, @1.first_line); }
+	| tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND { $$ = makeEXP_ifElseStatement($2, $4, $8, @1.first_line); }
+	| tWHILE expr tBEGIN stmt_list tEND { $$ = makeEXP_whileStatement($2, $4, @1.first_line); }
 ;
 
 expr:
@@ -86,33 +91,33 @@ expr:
 ;
 
 identifier:
-	| tIDENTIFIER { $$ = makeEXP_identifier($1); }
+	| tIDENTIFIER { $$ = makeEXP_identifier($1, @1.first_line); }
 ;
 
 litteral:
-	  tINTEGER  { $$ = makeEXP_intLiteral($1); } 
-	| tFLOAT { $$ = makeEXP_floatLiteral($1); }
-	| tBOOLEAN { $$ = makeEXP_boolLiteral($1); }
-	| tSTRING { $$ = makeEXP_stringLiteral($1); }
+	  tINTEGER  { $$ = makeEXP_intLiteral($1, @1.first_line); } 
+	| tFLOAT { $$ = makeEXP_floatLiteral($1, @1.first_line); }
+	| tBOOLEAN { $$ = makeEXP_boolLiteral($1, @1.first_line); }
+	| tSTRING { $$ = makeEXP_stringLiteral($1, @1.first_line); }
 ;
 
 binary_expr:
-	  expr tPLUS expr { $$ = makeEXP_binary(k_expressionKindAddition, $1, $3); }
-	| expr tMINUS expr { $$ = makeEXP_binary(k_expressionKindSubtraction, $1, $3); }
-	| expr tTIMES expr { $$ = makeEXP_binary(k_expressionKindMultiplication, $1, $3); }
-	| expr tDIV expr { $$ = makeEXP_binary(k_expressionKindDivision, $1, $3); }
+	  expr tPLUS expr { $$ = makeEXP_binary(k_expressionKindAddition, $1, $3, @1.first_line); }
+	| expr tMINUS expr { $$ = makeEXP_binary(k_expressionKindSubtraction, $1, $3, @1.first_line); }
+	| expr tTIMES expr { $$ = makeEXP_binary(k_expressionKindMultiplication, $1, $3, @1.first_line); }
+	| expr tDIV expr { $$ = makeEXP_binary(k_expressionKindDivision, $1, $3, @1.first_line); }
 
-	| expr tEQUALS expr { $$ = makeEXP_binary(k_expressionKindEquals, $1, $3); }
-	| expr tNOTEQUALS expr { $$ = makeEXP_binary(k_expressionKindNotEquals, $1, $3); }
+	| expr tEQUALS expr { $$ = makeEXP_binary(k_expressionKindEquals, $1, $3, @1.first_line); }
+	| expr tNOTEQUALS expr { $$ = makeEXP_binary(k_expressionKindNotEquals, $1, $3, @1.first_line); }
 	
-	| expr tAND expr { $$ = makeEXP_binary(k_expressionKindLogicalAnd, $1, $3); }
-	| expr tOR expr { $$ = makeEXP_binary(k_expressionKindLogicalOr, $1, $3); }
+	| expr tAND expr { $$ = makeEXP_binary(k_expressionKindLogicalAnd, $1, $3, @1.first_line); }
+	| expr tOR expr { $$ = makeEXP_binary(k_expressionKindLogicalOr, $1, $3, @1.first_line); }
 ;
 
 unary_expr:
-	  tNEGATE expr { $$ = makeEXP_negate($2); }
-	| tMINUS tINTEGER { $$ = makeEXP_intLiteral($2 * -1); } 
-	| tMINUS tFLOAT { $$ = makeEXP_intLiteral($2 * -1.0); }
+	  tNEGATE expr { $$ = makeEXP_negate($2, @1.first_line); }
+	| tMINUS tINTEGER { $$ = makeEXP_intLiteral($2 * -1, @1.first_line); } 
+	| tMINUS tFLOAT { $$ = makeEXP_intLiteral($2 * -1.0, @1.first_line); }
 ;
 %%
 
@@ -139,7 +144,8 @@ int main(int argc, char* argv[]) {
 		return 0;
 	} else if (strcmp("parse", command) == 0) {
 		if(yyparse() == 0) {
-			printf("OK");
+			//printf("OK");
+			prettyEXP(root);
 			return 0;
 		}
 	}
