@@ -1,0 +1,28 @@
+// This program checks whether an integer n is prime or not
+// This was heavily inspired by
+// http://www.stoimen.com/blog/2012/05/08/computer-algorithms-determine-if-a-number-is-prime/
+
+var n: int = 5;
+var i: int = 2;
+var n_mod_i: int = 0;
+var is_prime: int = -1;
+
+if n == 2 {
+    print "is prime";
+} else {
+    while (n - i) != 0 {
+        n_mod_i = (n - i * (n / i));
+        if (n_mod_i == 0) {
+            is_prime = 0;
+            n = i; // exit the loop
+        } else {
+            i = i + 1;
+        }
+    }
+
+    if is_prime == -1 {
+        print "is prime";
+    } else {
+        print "is not prime";
+    }
+}

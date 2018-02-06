@@ -1,0 +1,14 @@
+// This is intended to cause a parsing error because of
+// a missing semi colon at the line below.
+// This should scan properly, but should cause a syntax error when parsing.
+
+var num_iter: int = 10;
+
+var result: int = 0;
+var curr_iter: int = 0;
+
+while (num_iter - curr_iter) != 0 {
+    result = result * 2 // missing semi colon!!
+}
+
+print result;

@@ -1,0 +1,5 @@
+// This program is intended to cause a parse error.
+// It is scanned properly but is not parsed properly due to 
+// malformed identifiers.
+
+var 00thisIsAnInvalidIdentifier: string = "test";

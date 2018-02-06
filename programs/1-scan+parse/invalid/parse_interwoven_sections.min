@@ -1,0 +1,11 @@
+// This program is intended to cause a parsing error.
+// As per the language specifications, the declarative sections 
+// and the statement sections must not be interwoven.
+
+var test: string = "hello";
+var x: int = 10;
+var y: int = 0;
+
+y = x - 9; // stmt section interwoven!!! illegal
+
+var z: float = 3.0;

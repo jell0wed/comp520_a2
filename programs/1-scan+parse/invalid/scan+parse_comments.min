@@ -1,0 +1,29 @@
+/*
+ This file has 2 problems:
+
+ (1) This should not compile as we do not support block comments
+ as mentionned in the language specification file. Hence this file 
+ wont pass the parse phase of the compiler.
+
+ (2) This comments contains . symbol which are illegal. Hence it should 
+ not pass the scanner phase too.
+
+ ... dot dot dot
+ 
+*/
+
+// Approximate the square root of x
+var x: float = 0.0;
+var guess: float = 1.0;
+var quot: float = 0.0;
+var iter: int = 10;
+
+read x;
+while iter {
+    quot = x / guess;
+    guess = 0.5 * (guess + quot);
+    iter = iter - 1;
+}
+
+print guess;
+print guess * guess;

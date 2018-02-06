@@ -1,0 +1,6 @@
+// This is intended to cause a scan error
+// Accentuated substrings are not supposed to be supported as per the
+// language specification. Hence this string should cause the 
+// code not to pass the scan phase (it wont recognize that it is a string)
+
+var test_str: string = "This is an accentuated string éàèîç";

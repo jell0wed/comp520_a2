@@ -1,0 +1,11 @@
+// This program is intended to cause a scan error
+// As per the language specifications:
+// They may not contain any leading zeros on the LHS of the
+// decimal, but may have any number of trailing zeros. In other words, the LHS of the decimal
+// must be a valid integer according to our specification
+
+var f1 = 0.01; // valid one
+var f2 = 000.01; // invalid one
+var f3 = 01.3; // invalid one
+var f4 = .3; // invalid one
+var f5 = 5. // invalid one

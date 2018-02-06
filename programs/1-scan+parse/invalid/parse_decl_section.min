@@ -1,0 +1,5 @@
+// This program is intended to cause a parse error.
+// This program only contains a declaration section, there is no
+// statement section, making the program non parsable.
+
+var test: string = "hello";
