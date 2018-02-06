@@ -847,7 +847,7 @@ YY_RULE_SETUP
 case 12:
 YY_RULE_SETUP
 #line 24 "mini.l"
-{ if (g_token) { printf("tNOTEQUALS\n"); } tNOTEQUALS; }
+{ if (g_token) { printf("tNOTEQUALS\n"); }return tNOTEQUALS; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP

@@ -21,7 +21,7 @@ ALLOWED_DATATYPES (float|boolean|int|string)
 \*                          { if (g_token) { printf("tTIMES\n"); }return tTIMES; }
 \/                          { if (g_token) { printf("tDIV\n"); }return tDIV; }
 ==                          { if (g_token) { printf("tEQUALS\n"); }return tEQUALS; }
-!=                          { if (g_token) { printf("tNOTEQUALS\n"); } tNOTEQUALS; }
+!=                          { if (g_token) { printf("tNOTEQUALS\n"); }return tNOTEQUALS; }
 &&                          { if (g_token) { printf("tAND\n"); }return tAND; }
 \|\|                        { if (g_token) { printf("tOR\n"); } tOR; } 
 !                           { if (g_token) { printf("tNOT\n"); }return tNOT; }
