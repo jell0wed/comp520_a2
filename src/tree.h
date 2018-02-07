@@ -3,23 +3,10 @@
 
 #include "types.h"
 
-enum SymbolKind {
-    tTest
-};
-
-typedef struct SYMBOL SYMBOL;
-struct SYMBOL {
-    char* name;
-    enum SymbolKind kind;
-    union {
-
-    } val;
-    struct SYMBOL* next;
-};
-
 typedef struct EXP EXP;
 struct EXP {
     enum ExpressionKind kind;
+    enum AllowedTypes inferredType;
     int lineno;
     union {
         char *identifer;
@@ -59,6 +46,16 @@ typedef struct PROGRAM PROGRAM;
 struct PROGRAM {
     VAR_DECL* variable_decls;
     STATEMENT* statements;
+};
+
+typedef struct SYMBOL SYMBOL;
+struct SYMBOL {
+    char* name;
+    enum SymbolKind kind; 
+    union {
+        VAR_DECL* var;
+    } val;
+    struct SYMBOL* next;
 };
 
 EXP *makeEXP_intLiteral(int intLiteral, int lineno);

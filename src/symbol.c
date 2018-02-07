@@ -96,14 +96,17 @@ void symImplementationVAR_DECL(SymbolTable* t, VAR_DECL* v) {
             symImplementationVAR_DECL(t, v->val.var_decl_list.next);
             break; 
         case k_variableDeclKindDecl:
+            // make sure it is a valid type
+            symTYPE(t, v->lineno, v->val.decl.type);
             // make sure identifier is not already declared
             if(defSymbol(t, v->val.decl.identifier->val.identifer)) {
                 reportStrError("\"%s\" is already declared",
                                 v->val.decl.identifier->val.identifer,
                                 v->val.decl.identifier->lineno);
+            } else { // put it in the symbol table
+                SYMBOL* s = putSymbol(t, v->val.decl.identifier->val.identifer, st_symbolVariable);
+                s->val.var = v; // link the variable with the symbol
             }
-            // make sure it is a valid type
-            symTYPE(t, v->lineno, v->val.decl.type);
             break;
     }
 }

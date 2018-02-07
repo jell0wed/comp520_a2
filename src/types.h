@@ -1,11 +1,16 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+enum SymbolKind {
+    st_symbolVariable
+};
+
 enum AllowedTypes {
     t_typeInteger,
     t_typeFloat,
     t_typeBool,
-    t_typeString
+    t_typeString,
+    t_typeUnknown
 };
 
 enum ExpressionKind {
