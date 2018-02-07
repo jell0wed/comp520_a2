@@ -138,8 +138,9 @@ void typeImplementationVAR_DECL(VAR_DECL* v) {
             break;
         case k_variableDeclKindDecl:
             // make sure the initial expression value matches the var type 
-            getSymbol(mainSymbolTable, v->val.decl.identifier->val.identifer);
-            
+            typeImplementationEXP(v->val.decl.value);
+            SYMBOL* identifierSymbol = getSymbol(mainSymbolTable, v->val.decl.identifier->val.identifer);
+            assignmentTypeMatches(identifierSymbol->val.var, v->val.decl.value);
             break;
     }
 }
@@ -199,7 +200,7 @@ void typeImplementationEXP(EXP* e) {
             break;
         case k_expressionKindNegate:
             typeImplementationEXP(e->val.unary);
-            if(checkBOOL(e->val.unary->inferredType, e)) {
+            if(checkBOOL(e->val.unary->inferredType, e->lineno)) {
                 e->inferredType = t_typeBool;
             }
     }
