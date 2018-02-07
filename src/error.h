@@ -4,13 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-FILE* stderr;
+extern FILE* stderr;
 
 int errors = 0;
 
 int lineno;
 
-void yyerror(const char *s);
+void yyerror(char *s);
 
 void reportError(char *s, int lineno);
 

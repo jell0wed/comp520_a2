@@ -5,7 +5,8 @@ extern int yylineno;
 #include "types.h"
 #include "tree.h"
 #include "pretty.h"
-#include "error.h"
+#include "symbol.h"
+#include "type.h"
 
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 
@@ -154,8 +155,19 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 	} else if (strcmp("symbol", command) == 0) {
-		
+		if(yyparse() == 0) {
+			symPROGRAM(root);
+			noErrors();
+			printSymbolTable(mainSymbolTable);
+		}
 		return 0;
+	} else if (strcmp("typecheck", command) == 0) {
+		if(yyparse() == 0) {
+			symPROGRAM(root);
+			noErrors();
+			typeImplementationPROGRAM(root);
+			noErrors();
+		}
 	}
 	return 1;
 }

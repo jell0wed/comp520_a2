@@ -1,5 +1,4 @@
 #include "symbol.h"
-#include "error.h"
 
 int hash(char* str) {
     unsigned int hash = 0;
@@ -96,13 +95,11 @@ void symImplementationVAR_DECL(SymbolTable* t, VAR_DECL* v) {
             symImplementationVAR_DECL(t, v->val.var_decl_list.next);
             break; 
         case k_variableDeclKindDecl:
-            // make sure it is a valid type
-            symTYPE(t, v->lineno, v->val.decl.type);
             // make sure identifier is not already declared
             if(defSymbol(t, v->val.decl.identifier->val.identifer)) {
                 reportStrError("\"%s\" is already declared",
                                 v->val.decl.identifier->val.identifer,
-                                v->val.decl.identifier->lineno);
+                                v->lineno);
             } else { // put it in the symbol table
                 SYMBOL* s = putSymbol(t, v->val.decl.identifier->val.identifer, st_symbolVariable);
                 s->val.var = v; // link the variable with the symbol
@@ -144,10 +141,29 @@ void symImplementationSTATEMENT(SymbolTable* t, STATEMENT* s) {
 void symImplementationEXP(SymbolTable* t, EXP* e) {
     if(e == 0) { return; }
     switch(e->kind) {
+        case k_expressionKindIntLiteral:
+        case k_expressionKindFloatLiteral:
+        case k_expressionKindStringLiteral:
+        case k_expressionKindBooleanLiteral:
+            break;
         case k_expressionKindIdentifier: // makes sure the identifier exists
-            if(!defSymbol) {
-                reportStrError("\"%s\" is not declared", e->val.identifer, e->lineno);
+            if(!defSymbol(t, e->val.identifer)) {
+                reportStrError("unknown symbol \"%s\" (probably not declared)", e->val.identifer, e->lineno);
             }
+            break;
+        case k_expressionKindAddition:
+        case k_expressionKindSubtraction:
+        case k_expressionKindMultiplication:
+        case k_expressionKindDivision:
+        case k_expressionKindEquals:
+        case k_expressionKindNotEquals:
+        case k_expressionKindLogicalAnd:
+        case k_expressionKindLogicalOr:
+            symImplementationEXP(t, e->val.binary.lhs);
+            symImplementationEXP(t, e->val.binary.rhs);
+            break;
+        case k_expressionKindNegate:
+            symImplementationEXP(t, e->val.unary);
             break;
     }
 }
@@ -170,4 +186,26 @@ void symTYPE(SymbolTable* t, int lineno, enum AllowedTypes usedType) {
 
 void symTYPE_LITERAL_EXP(SymbolTable* t, enum AllowedTypes usedType, EXP* e) {
     
+}
+
+void printSymbolTable(SymbolTable *t) {
+    if(t == 0) { return; }
+    printSymbolTable(t->next);
+    for(int i = 0; i < HashSize; i++) {
+        printSymbol(t->table[i]);
+    }
+}
+
+void printSymbol(SYMBOL* s) {
+    if(s == 0) { return; }
+    printSymbol(s->next);
+    
+    printf("Symbol<%s>(%s)\n", symbolKindToStr(s->kind), s->name);
+}
+
+char* symbolKindToStr(enum SymbolKind k) {
+    switch(k) {
+        case st_symbolVariable: return "st_symbolVariable";    
+    }
+    return "unknown";
 }

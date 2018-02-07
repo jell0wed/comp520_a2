@@ -2,7 +2,6 @@
 #define TYPE_H
 
 #include "tree.h"
-#include "error.h" 
 
 char* typeToStr(enum AllowedTypes t);
 

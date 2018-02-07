@@ -1,6 +1,7 @@
 #ifndef SYMBOL_H
 #define SYMBOL_H
 
+#include <stdio.h>
 #include "tree.h"
 
 #define HashSize 317
@@ -32,5 +33,9 @@ void symImplementationEXP(SymbolTable* t, EXP* e);
 
 void symTYPE(SymbolTable* t, int lineno, enum AllowedTypes);
 void symTYPE_LITERAL_EXP(SymbolTable* t, enum AllowedTypes usedType, EXP* e);
+
+void printSymbolTable(SymbolTable *t);
+void printSymbol(SYMBOL* s);
+char* symbolKindToStr(enum SymbolKind k);
 
 #endif

@@ -11,26 +11,26 @@ void yyerror(char *s)
 }
 
 void reportError(char *s, int lineno)
-{ printf("*** %s at line %i\n",s,lineno);
+{ fprintf(stderr, "*** %s at line %i\n",s,lineno);
   errors++;
 }
 
 void reportStrError(char *s, char *name, int lineno)
-{ printf("*** ");
-  printf(s,name);
-  printf(" at line %i\n",lineno);
+{ fprintf(stderr, "*** ");
+  fprintf(stderr, s,name);
+  fprintf(stderr, " at line %i\n",lineno);
   errors++;
 }
 
 void reportGlobalError(char *s)
-{ printf("*** %s\n",s);
+{ fprintf(stderr, "*** %s\n",s);
   errors++;
 }
 
 void reportStrGlobalError(char *s, char *name)
-{ printf("*** ");
-  printf(s,name);
-  printf("\n");
+{ fprintf(stderr, "*** ");
+  fprintf(stderr, s,name);
+  fprintf(stderr, "\n");
   errors++;
 }
 
