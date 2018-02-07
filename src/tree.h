@@ -3,6 +3,20 @@
 
 #include "types.h"
 
+enum SymbolKind {
+    tTest
+};
+
+typedef struct SYMBOL SYMBOL;
+struct SYMBOL {
+    char* name;
+    enum SymbolKind kind;
+    union {
+
+    } val;
+    struct SYMBOL* next;
+};
+
 typedef struct EXP EXP;
 struct EXP {
     enum ExpressionKind kind;

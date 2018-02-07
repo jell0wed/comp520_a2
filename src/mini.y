@@ -156,6 +156,9 @@ int main(int argc, char* argv[]) {
 			prettyPROGRAM(root);
 			return 0;
 		}
+	} else if (strcmp("symbol", command) == 0) {
+		
+		return 0;
 	}
 	return 1;
 }
