@@ -1,14 +1,11 @@
 %{
 #include <stdio.h>
 extern int yylineno;
-void yyerror(const char *s) { 
-	fprintf(stderr, "Error: (line %d) %s\n", yylineno, s);
-	exit(1);
-}
 
 #include "types.h"
 #include "tree.h"
 #include "pretty.h"
+#include "error.h"
 
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 

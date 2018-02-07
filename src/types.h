@@ -23,7 +23,6 @@ enum ExpressionKind {
     k_expressionKindLogicalAnd,
     k_expressionKindLogicalOr,
     k_expressionKindNegate,
-    k_expressionProgramBody
 };
 
 enum VariableDeclKind {
