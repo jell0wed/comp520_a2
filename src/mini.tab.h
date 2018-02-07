@@ -118,10 +118,14 @@ typedef union YYSTYPE
 	char* stringval;
 	char* identifierval;
 	char* datatype;
+
 	struct EXP *exp;
+	struct VAR_DECL *var_decl;
+	struct STATEMENT *statement;
+	struct PROGRAM *program;
 }
 /* Line 1529 of yacc.c.  */
-#line 125 "mini.tab.h"
+#line 129 "mini.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -3,6 +3,9 @@
 
 #include "tree.h"
 
-void prettyEXP(EXP *e, int indent);
+void prettyPROGRAM(PROGRAM *p);
+void prettyEXP(EXP *e);
+void prettyVAR_DECL(VAR_DECL *v);
+void prettySTATEMENT(STATEMENT *s);
 
 #endif

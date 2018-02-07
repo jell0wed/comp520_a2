@@ -12,7 +12,7 @@ void yyerror(const char *s) {
 
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 
-EXP *root;
+PROGRAM *root;
 %}
 %locations
 %error-verbose
@@ -24,7 +24,11 @@ EXP *root;
 	char* stringval;
 	char* identifierval;
 	char* datatype;
+
 	struct EXP *exp;
+	struct VAR_DECL *var_decl;
+	struct STATEMENT *statement;
+	struct PROGRAM *program;
 }
 %token <intval> tINTEGER 					// raw integer value
 %token <boolval> tBOOLEAN					// raw boolean value
@@ -39,7 +43,11 @@ EXP *root;
 %token tLPAREN tRPAREN						// parenthesis
 %token tBEGIN tEND							// statement block
 %token tSEMICOLON							// end of line
-%type <exp> expr litteral binary_expr unary_expr var_dec var_dec_list stmt stmt_list mini identifier
+
+%type <program> program mini
+%type <var_decl> var_dec_list var_dec
+%type <statement> stmt_list stmt
+%type <exp> expr litteral binary_expr unary_expr identifier
 
 %left tOR
 %left tAND
@@ -51,35 +59,35 @@ EXP *root;
 %%
 program: mini { root = $1; }
 mini:
-	  var_dec_list stmt_list { $$ = makeEXP_programBody($1, $2, @1.first_line); }
-	| stmt_list { $$ = makeEXP_programBody(0, $1, @1.first_line); }
+	  var_dec_list stmt_list { $$ = makePROGRAM_programBody($1, $2, @1.first_line); }
+	| stmt_list { $$ = makePROGRAM_programBody(0, $1, @1.first_line); }
 ;
 
 var_dec_list:
-	  var_dec_list var_dec { $$ = makeEXP_varDeclarationList($2, $1, @1.first_line); }
+	  var_dec_list var_dec { $$ = makeVARDECL_varDeclarationList($2, $1, @1.first_line); }
 	| var_dec { $$ = $1; }
 ;
 
 var_dec:
-	  tVARDECL identifier tTINTEGER tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeInteger, $5, @1.first_line); }
-	| tVARDECL identifier tTFLOAT tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeFloat, $5, @1.first_line); }
-	| tVARDECL identifier tTBOOLEAN tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeBool, $5, @1.first_line); }
-	| tVARDECL identifier tTSTRING tASSIGN expr tSEMICOLON { $$ = makeEXP_varDeclaration($2, t_typeString, $5, @1.first_line); }
+	  tVARDECL identifier tTINTEGER tASSIGN expr tSEMICOLON { $$ = makeVARDECL_varDeclaration($2, t_typeInteger, $5, @1.first_line); }
+	| tVARDECL identifier tTFLOAT tASSIGN expr tSEMICOLON { $$ = makeVARDECL_varDeclaration($2, t_typeFloat, $5, @1.first_line); }
+	| tVARDECL identifier tTBOOLEAN tASSIGN expr tSEMICOLON { $$ = makeVARDECL_varDeclaration($2, t_typeBool, $5, @1.first_line); }
+	| tVARDECL identifier tTSTRING tASSIGN expr tSEMICOLON { $$ = makeVARDECL_varDeclaration($2, t_typeString, $5, @1.first_line); }
 ;
 
 stmt_list:
-	  stmt_list stmt { $$ = makeEXP_statementList($2, $1, @1.first_line); }
+	  stmt_list stmt { $$ = makeSTATMENT_statementList($2, $1, @1.first_line); }
 	| stmt { $$ = $1; }
 ;
 
 stmt:
-	  tREAD identifier tSEMICOLON { $$ = makeEXP_readStatement($2, @1.first_line); }
-	| tPRINT expr tSEMICOLON { $$ = makeEXP_printStatement($2, @1.first_line); }
-	| identifier tASSIGN expr tSEMICOLON { $$ = makeEXP_assignmentStatement($1 , $3, @1.first_line); }
-	| identifier tASSIGN litteral tSEMICOLON { $$ = makeEXP_assignmentStatement($1 , $3, @1.first_line); }
-	| tIF expr tBEGIN stmt_list tEND { $$ = makeEXP_ifElseStatement($2, $4, 0, @1.first_line); }
-	| tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND { $$ = makeEXP_ifElseStatement($2, $4, $8, @1.first_line); }
-	| tWHILE expr tBEGIN stmt_list tEND { $$ = makeEXP_whileStatement($2, $4, @1.first_line); }
+	  tREAD identifier tSEMICOLON { $$ = makeSTATEMENT_readStatement($2, @1.first_line); }
+	| tPRINT expr tSEMICOLON { $$ = makeSTATEMENT_printStatement($2, @1.first_line); }
+	| identifier tASSIGN expr tSEMICOLON { $$ = makeSTATEMENT_assignmentStatement($1 , $3, @1.first_line); }
+	| identifier tASSIGN litteral tSEMICOLON { $$ = makeSTATEMENT_assignmentStatement($1 , $3, @1.first_line); }
+	| tIF expr tBEGIN stmt_list tEND { $$ = makeSTATEMENT_ifElseStatement($2, $4, 0, @1.first_line); }
+	| tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND { $$ = makeSTATEMENT_ifElseStatement($2, $4, $8, @1.first_line); }
+	| tWHILE expr tBEGIN stmt_list tEND { $$ = makeSTATEMENT_whileStatement($2, $4, @1.first_line); }
 ;
 
 expr:
@@ -145,7 +153,7 @@ int main(int argc, char* argv[]) {
 	} else if (strcmp("parse", command) == 0) {
 		if(yyparse() == 0) {
 			//printf("OK");
-			prettyEXP(root, 0);
+			prettyPROGRAM(root);
 			return 0;
 		}
 	}

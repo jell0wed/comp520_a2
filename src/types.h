@@ -8,21 +8,12 @@ enum AllowedTypes {
     t_typeString
 };
 
-enum ExpressionFamily {
-    ef_Expression,
-    ef_VarDeclarations,
-    ef_Statements,
-    ef_Literal,
-    ef_Root
-};
-
 enum ExpressionKind {
     k_expressionKindIntLiteral,
     k_expressionKindFloatLiteral,
     k_expressionKindStringLiteral,
     k_expressionKindBooleanLiteral,
     k_expressionKindIdentifier,
-    
     k_expressionKindAddition,
     k_expressionKindSubtraction,
     k_expressionKindMultiplication,
@@ -31,21 +22,22 @@ enum ExpressionKind {
     k_expressionKindNotEquals,
     k_expressionKindLogicalAnd,
     k_expressionKindLogicalOr,
-
     k_expressionKindNegate,
-
-    k_expressionKindVarDecl,
-    k_expressionKindVarDeclarationList,
-
-    k_expressionKindReadStatement,
-    k_expressionKindPrintStatement,
-    k_expressionKindAssignmentStatement,
-    k_expressionKindIfElseStatement,
-    k_expressionKindWhileStatement,
-
-    k_expressionKindStatementList,
-
     k_expressionProgramBody
+};
+
+enum VariableDeclKind {
+    k_variableDeclKindDecl,
+    k_variableDeclKindDeclList
+};
+
+enum StatementKind {
+    k_statementKindRead,
+    k_statementKindPrint,
+    k_statementKindAssignment,
+    k_statementKindIfElse,
+    k_statementKindWhile,
+    k_statementKIndStatementList
 };
 
 #endif
