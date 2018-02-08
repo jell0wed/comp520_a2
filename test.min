@@ -8,6 +8,15 @@ var n: int = 1111;
 var rev: int = 0;
 var num: int = 10;
 
-if n {
+while num != 0 {
+    num = (num - 10 * (num / 10));
+    rev = rev * 10 + num;
+    num = num / 10;
+}
+
+if rev == n {
     print n;
+    print "is palindrome";
+} else {
+    print "is not palindrome";
 }

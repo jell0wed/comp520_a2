@@ -34,8 +34,8 @@ void codeVAR_DECL(VAR_DECL* v) {
     if(v == 0) { return; }
     switch(v->kind) {
         case k_variableDeclKindDeclList:
-            codeVAR_DECL(v->val.var_decl_list.var_decl);
             codeVAR_DECL(v->val.var_decl_list.next);
+            codeVAR_DECL(v->val.var_decl_list.var_decl);
             break;
         case k_variableDeclKindDecl:
             fprintf(codeFile, "%s %s = ", typeToCStr(v->val.decl.type), v->val.decl.identifier->val.identifer);
@@ -50,8 +50,8 @@ void codeSTATEMENT(STATEMENT* s) {
     if(s == 0) { return; }
     switch(s->kind) {
         case k_statementKIndStatementList:
-            codeSTATEMENT(s->val.stmt_list.stmt);
             codeSTATEMENT(s->val.stmt_list.next);
+            codeSTATEMENT(s->val.stmt_list.stmt);
             break;
         case k_statementKindRead:
             fprintf(codeFile, "scanf(\"%s\", %s);", 

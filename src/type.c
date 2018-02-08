@@ -158,7 +158,6 @@ void typeImplementationSTATEMENT(STATEMENT* s) {
             assignmentTypeMatches(identifierSymbol->val.var, s->val.assignment.value);
             break;
         case k_statementKindIfElse:
-            printf("ifelse expr %d", s->val.ifelseblock.expr->kind);
             typeImplementationEXP(s->val.ifelseblock.expr);
             ifElseWhileTypeMatches(s->val.ifelseblock.expr);
             typeImplementationSTATEMENT(s->val.ifelseblock.bodyblock);
