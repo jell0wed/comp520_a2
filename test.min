@@ -6,13 +6,6 @@
 
 var n: int = 1111;
 var rev: int = 0;
-var num_mod_10: int = (n && rev);
-
-while num_mod_10 != 0 {
-    num_mod_10 = (num - 10 * (num / 10));
-    rev = rev * 10 + num_mod_10;
-    num = num / 10;
-}
 
 if rev == n {
     print "is palindrome";

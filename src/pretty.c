@@ -42,12 +42,12 @@ void prettySTATEMENT(STATEMENT *s) {
     switch(s->kind) {
         case k_statementKindRead:
             printf("read ");
-            prettyEXP(s->val.unary_stmt.e);
+            prettyEXP(s->val.unary_stmt);
             printf("\n");
             break;
         case k_statementKindPrint:
             printf("print ");
-            prettyEXP(s->val.unary_stmt.e);
+            prettyEXP(s->val.unary_stmt);
             printf("\n");
             break;
         case k_statementKindAssignment:

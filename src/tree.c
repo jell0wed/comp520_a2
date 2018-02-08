@@ -100,7 +100,7 @@ STATEMENT *makeSTATEMENT_readStatement(EXP* identifier, int lineno) {
     STATEMENT *s = malloc(sizeof(STATEMENT));
     s->lineno = lineno;
     s->kind = k_statementKindRead;
-    s->val.unary_stmt.e = identifier;
+    s->val.unary_stmt = identifier;
     return s;
 }
 
@@ -108,7 +108,7 @@ STATEMENT *makeSTATEMENT_printStatement(EXP* e, int lineno) {
     STATEMENT *s = malloc(sizeof(STATEMENT));
     s->lineno = lineno;
     s->kind = k_statementKindPrint;
-    s->val.unary_stmt.e = e;
+    s->val.unary_stmt = e;
     return s;
 }
 

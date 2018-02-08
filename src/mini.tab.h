@@ -110,7 +110,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 18 "mini.y"
+#line 19 "mini.y"
 {
 	int intval;
 	float floatval;

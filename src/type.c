@@ -160,14 +160,17 @@ void typeImplementationSTATEMENT(STATEMENT* s) {
         case k_statementKindIfElse:
             typeImplementationEXP(s->val.ifelseblock.expr);
             ifElseWhileTypeMatches(s->val.ifelseblock.expr);
+            typeImplementationSTATEMENT(s->val.ifelseblock.bodyblock);
+            typeImplementationSTATEMENT(s->val.ifelseblock.elseblock);
             break;
         case k_statementKindWhile:
             typeImplementationEXP(s->val.whileblock.expr);
             ifElseWhileTypeMatches(s->val.whileblock.expr);
+            typeImplementationSTATEMENT(s->val.whileblock.bodyblock);
             break;
         case k_statementKindRead:
         case k_statementKindPrint:
-            typeImplementationEXP(s->val.unary_stmt.e);
+            typeImplementationEXP(s->val.unary_stmt);
             break;
     }
 }
@@ -206,6 +209,7 @@ void typeImplementationEXP(EXP* e) {
             if(checkBOOL(e->val.unary->inferredType, e->lineno)) {
                 e->inferredType = t_typeBool;
             }
+            break;
     }
 }
 

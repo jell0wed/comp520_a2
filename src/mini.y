@@ -8,6 +8,7 @@ extern int yylineno;
 #include "symbol.h"
 #include "type.h"
 
+
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 
 PROGRAM *root;
@@ -167,6 +168,15 @@ int main(int argc, char* argv[]) {
 			noErrors();
 			typeImplementationPROGRAM(root);
 			noErrors();
+		}
+	} else if(strcmp("codegen", command) == 0) {
+		if(yyparse() == 0) {
+			symPROGRAM(root);
+			noErrors();
+			typeImplementationPROGRAM(root);
+			noErrors();
+			initializeCode(stdout);
+			codePROGRAM(root);
 		}
 	}
 	return 1;

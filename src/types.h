@@ -6,11 +6,12 @@ enum SymbolKind {
 };
 
 enum AllowedTypes {
+    t_typeUnknown,
     t_typeInteger,
     t_typeFloat,
     t_typeBool,
-    t_typeString,
-    t_typeUnknown
+    t_typeString
+    
 };
 
 enum ExpressionKind {

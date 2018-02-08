@@ -9,7 +9,7 @@ struct EXP {
     enum AllowedTypes inferredType;
     int lineno;
     union {
-        char *identifer;
+        char* identifer;
         int intLiteral;
         int boolLiteral;
         float floatLiteral;
@@ -34,7 +34,7 @@ struct STATEMENT {
     enum StatementKind kind;
     int lineno;
     union {
-        struct { EXP* e; } unary_stmt;
+        EXP* unary_stmt;
         struct { EXP* identifier; EXP* value; } assignment;
         struct { EXP* expr; STATEMENT* bodyblock; STATEMENT* elseblock; } ifelseblock;
         struct { EXP* expr; STATEMENT* bodyblock; } whileblock;

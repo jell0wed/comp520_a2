@@ -117,10 +117,10 @@ void symImplementationSTATEMENT(SymbolTable* t, STATEMENT* s) {
             break;
         case k_statementKindRead:
             // make sure the identifier is declared
-            symImplementationEXP(t, s->val.unary_stmt.e);
+            symImplementationEXP(t, s->val.unary_stmt);
             break;
         case k_statementKindPrint:
-            symImplementationEXP(t, s->val.unary_stmt.e);
+            symImplementationEXP(t, s->val.unary_stmt);
             break;
         case k_statementKindAssignment:
             // make sure the idenfifier is declared
@@ -129,10 +129,13 @@ void symImplementationSTATEMENT(SymbolTable* t, STATEMENT* s) {
         case k_statementKindIfElse:
             // make sure the identifier is declared
             symImplementationEXP(t, s->val.ifelseblock.expr);
+            symImplementationSTATEMENT(t, s->val.ifelseblock.bodyblock);
+            symImplementationSTATEMENT(t, s->val.ifelseblock.elseblock);
             break;
         case k_statementKindWhile:
             // make sure the identifier is declared
             symImplementationEXP(t, s->val.whileblock.expr);
+            symImplementationSTATEMENT(t, s->val.whileblock.bodyblock);
             break;
     }
 }

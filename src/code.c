@@ -6,8 +6,8 @@ void initializeCode(FILE * f) {
 
 void codePREAMBLE() {
     fprintf(codeFile, "#include <stdio.h>\n");
-    fprintf(codeFile, "#define TRUE 1");
-    fprintf(codeFile, "#define FALSE 0");
+    fprintf(codeFile, "#define TRUE 1\n");
+    fprintf(codeFile, "#define FALSE 0\n");
     fprintf(codeFile, "\n");
     fprintf(codeFile, "int main(int argc, char* argv[]) {\n");
 }
@@ -54,12 +54,12 @@ void codeSTATEMENT(STATEMENT* s) {
             break;
         case k_statementKindRead:
             fprintf(codeFile, "scanf(\"%s\", %s);", 
-                    typeToCStrType(s->val.unary_stmt.e->inferredType), 
-                    s->val.unary_stmt.e->val.identifer); // it must be the case that it is an identifier
+                    typeToCStrType(s->val.unary_stmt->inferredType), 
+                    s->val.unary_stmt->val.identifer); // it must be the case that it is an identifier
             break;
         case k_statementKindPrint:
-            fprintf(codeFile, "printf(\"%s\", ", typeToCStrType(s->val.unary_stmt.e->inferredType));
-            codeEXP(s->val.unary_stmt.e);
+            fprintf(codeFile, "printf(\"%s\", ", typeToCStrType(s->val.unary_stmt->inferredType));
+            codeEXP(s->val.unary_stmt);
             fprintf(codeFile, ");");
             break;
         case k_statementKindAssignment:
@@ -95,10 +95,16 @@ void codeEXP(EXP* e) {
     if(e == 0) { return; }
     switch(e->kind) {
         case k_expressionKindIntLiteral:
+            fprintf(codeFile, "%d", e->val.intLiteral);
+            break;
         case k_expressionKindFloatLiteral:
+            fprintf(codeFile, "%.5f", e->val.floatLiteral);
+            break;
         case k_expressionKindBooleanLiteral:
+            fprintf(codeFile, e->val.boolLiteral == 1 ? "TRUE" : "FALSE");
+            break;
         case k_expressionKindStringLiteral:
-            fprintf(codeFile, typeToCStrType(e->inferredType), e->val.floatLiteral);
+            fprintf(codeFile, "\"%s\"", e->val.stringLiteral);
             break;
         case k_expressionKindIdentifier:
             fprintf(codeFile, "%s", e->val.identifer);

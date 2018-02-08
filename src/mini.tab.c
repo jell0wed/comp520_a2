@@ -147,6 +147,7 @@ extern int yylineno;
 #include "symbol.h"
 #include "type.h"
 
+
 #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 
 PROGRAM *root;
@@ -172,7 +173,7 @@ PROGRAM *root;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 18 "mini.y"
+#line 19 "mini.y"
 {
 	int intval;
 	float floatval;
@@ -187,7 +188,7 @@ typedef union YYSTYPE
 	struct PROGRAM *program;
 }
 /* Line 193 of yacc.c.  */
-#line 191 "mini.tab.c"
+#line 192 "mini.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -212,7 +213,7 @@ typedef struct YYLTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 216 "mini.tab.c"
+#line 217 "mini.tab.c"
 
 #ifdef short
 # undef short
@@ -517,11 +518,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    58,    58,    60,    61,    65,    66,    70,    71,    72,
-      73,    77,    78,    82,    83,    84,    85,    86,    87,    88,
-      92,    93,    94,    95,    96,    99,   100,   104,   105,   106,
-     107,   111,   112,   113,   114,   116,   117,   119,   120,   124,
-     125,   126
+       0,    59,    59,    61,    62,    66,    67,    71,    72,    73,
+      74,    78,    79,    83,    84,    85,    86,    87,    88,    89,
+      93,    94,    95,    96,    97,   100,   101,   105,   106,   107,
+     108,   112,   113,   114,   115,   117,   118,   120,   121,   125,
+     126,   127
 };
 #endif
 
@@ -1533,203 +1534,203 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 58 "mini.y"
+#line 59 "mini.y"
     { root = (yyvsp[(1) - (1)].program); ;}
     break;
 
   case 3:
-#line 60 "mini.y"
+#line 61 "mini.y"
     { (yyval.program) = makePROGRAM_programBody((yyvsp[(1) - (2)].var_decl), (yyvsp[(2) - (2)].statement), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 4:
-#line 61 "mini.y"
+#line 62 "mini.y"
     { (yyval.program) = makePROGRAM_programBody(0, (yyvsp[(1) - (1)].statement), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 5:
-#line 65 "mini.y"
+#line 66 "mini.y"
     { (yyval.var_decl) = makeVARDECL_varDeclarationList((yyvsp[(2) - (2)].var_decl), (yyvsp[(1) - (2)].var_decl), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 6:
-#line 66 "mini.y"
+#line 67 "mini.y"
     { (yyval.var_decl) = (yyvsp[(1) - (1)].var_decl); ;}
     break;
 
   case 7:
-#line 70 "mini.y"
+#line 71 "mini.y"
     { (yyval.var_decl) = makeVARDECL_varDeclaration((yyvsp[(2) - (6)].exp), t_typeInteger, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 8:
-#line 71 "mini.y"
+#line 72 "mini.y"
     { (yyval.var_decl) = makeVARDECL_varDeclaration((yyvsp[(2) - (6)].exp), t_typeFloat, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 9:
-#line 72 "mini.y"
+#line 73 "mini.y"
     { (yyval.var_decl) = makeVARDECL_varDeclaration((yyvsp[(2) - (6)].exp), t_typeBool, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 10:
-#line 73 "mini.y"
+#line 74 "mini.y"
     { (yyval.var_decl) = makeVARDECL_varDeclaration((yyvsp[(2) - (6)].exp), t_typeString, (yyvsp[(5) - (6)].exp), (yylsp[(1) - (6)]).first_line); ;}
     break;
 
   case 11:
-#line 77 "mini.y"
+#line 78 "mini.y"
     { (yyval.statement) = makeSTATMENT_statementList((yyvsp[(2) - (2)].statement), (yyvsp[(1) - (2)].statement), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 12:
-#line 78 "mini.y"
+#line 79 "mini.y"
     { (yyval.statement) = (yyvsp[(1) - (1)].statement); ;}
     break;
 
   case 13:
-#line 82 "mini.y"
+#line 83 "mini.y"
     { (yyval.statement) = makeSTATEMENT_readStatement((yyvsp[(2) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 14:
-#line 83 "mini.y"
+#line 84 "mini.y"
     { (yyval.statement) = makeSTATEMENT_printStatement((yyvsp[(2) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 15:
-#line 84 "mini.y"
-    { (yyval.statement) = makeSTATEMENT_assignmentStatement((yyvsp[(1) - (4)].exp) , (yyvsp[(3) - (4)].exp), (yylsp[(1) - (4)]).first_line); ;}
-    break;
-
-  case 16:
 #line 85 "mini.y"
     { (yyval.statement) = makeSTATEMENT_assignmentStatement((yyvsp[(1) - (4)].exp) , (yyvsp[(3) - (4)].exp), (yylsp[(1) - (4)]).first_line); ;}
     break;
 
-  case 17:
+  case 16:
 #line 86 "mini.y"
+    { (yyval.statement) = makeSTATEMENT_assignmentStatement((yyvsp[(1) - (4)].exp) , (yyvsp[(3) - (4)].exp), (yylsp[(1) - (4)]).first_line); ;}
+    break;
+
+  case 17:
+#line 87 "mini.y"
     { (yyval.statement) = makeSTATEMENT_ifElseStatement((yyvsp[(2) - (5)].exp), (yyvsp[(4) - (5)].statement), 0, (yylsp[(1) - (5)]).first_line); ;}
     break;
 
   case 18:
-#line 87 "mini.y"
+#line 88 "mini.y"
     { (yyval.statement) = makeSTATEMENT_ifElseStatement((yyvsp[(2) - (9)].exp), (yyvsp[(4) - (9)].statement), (yyvsp[(8) - (9)].statement), (yylsp[(1) - (9)]).first_line); ;}
     break;
 
   case 19:
-#line 88 "mini.y"
+#line 89 "mini.y"
     { (yyval.statement) = makeSTATEMENT_whileStatement((yyvsp[(2) - (5)].exp), (yyvsp[(4) - (5)].statement), (yylsp[(1) - (5)]).first_line); ;}
     break;
 
   case 20:
-#line 92 "mini.y"
-    { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
-    break;
-
-  case 21:
 #line 93 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
-  case 22:
+  case 21:
 #line 94 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
-  case 23:
+  case 22:
 #line 95 "mini.y"
     { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
     break;
 
-  case 24:
+  case 23:
 #line 96 "mini.y"
+    { (yyval.exp) = (yyvsp[(1) - (1)].exp); ;}
+    break;
+
+  case 24:
+#line 97 "mini.y"
     { (yyval.exp) = (yyvsp[(2) - (3)].exp); ;}
     break;
 
   case 26:
-#line 100 "mini.y"
+#line 101 "mini.y"
     { (yyval.exp) = makeEXP_identifier((yyvsp[(1) - (1)].identifierval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 27:
-#line 104 "mini.y"
+#line 105 "mini.y"
     { (yyval.exp) = makeEXP_intLiteral((yyvsp[(1) - (1)].intval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 28:
-#line 105 "mini.y"
+#line 106 "mini.y"
     { (yyval.exp) = makeEXP_floatLiteral((yyvsp[(1) - (1)].floatval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 29:
-#line 106 "mini.y"
+#line 107 "mini.y"
     { (yyval.exp) = makeEXP_boolLiteral((yyvsp[(1) - (1)].boolval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 30:
-#line 107 "mini.y"
+#line 108 "mini.y"
     { (yyval.exp) = makeEXP_stringLiteral((yyvsp[(1) - (1)].stringval), (yylsp[(1) - (1)]).first_line); ;}
     break;
 
   case 31:
-#line 111 "mini.y"
+#line 112 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindAddition, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 32:
-#line 112 "mini.y"
+#line 113 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindSubtraction, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 33:
-#line 113 "mini.y"
+#line 114 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindMultiplication, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 34:
-#line 114 "mini.y"
+#line 115 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindDivision, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 35:
-#line 116 "mini.y"
+#line 117 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindEquals, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 36:
-#line 117 "mini.y"
+#line 118 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindNotEquals, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 37:
-#line 119 "mini.y"
+#line 120 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindLogicalAnd, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 38:
-#line 120 "mini.y"
+#line 121 "mini.y"
     { (yyval.exp) = makeEXP_binary(k_expressionKindLogicalOr, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp), (yylsp[(1) - (3)]).first_line); ;}
     break;
 
   case 39:
-#line 124 "mini.y"
+#line 125 "mini.y"
     { (yyval.exp) = makeEXP_negate((yyvsp[(2) - (2)].exp), (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 40:
-#line 125 "mini.y"
+#line 126 "mini.y"
     { (yyval.exp) = makeEXP_intLiteral((yyvsp[(2) - (2)].intval) * -1, (yylsp[(1) - (2)]).first_line); ;}
     break;
 
   case 41:
-#line 126 "mini.y"
+#line 127 "mini.y"
     { (yyval.exp) = makeEXP_intLiteral((yyvsp[(2) - (2)].floatval) * -1.0, (yylsp[(1) - (2)]).first_line); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1733 "mini.tab.c"
+#line 1734 "mini.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1949,7 +1950,7 @@ yyreturn:
 }
 
 
-#line 128 "mini.y"
+#line 129 "mini.y"
 
 
 int g_token;
@@ -1992,6 +1993,15 @@ int main(int argc, char* argv[]) {
 			noErrors();
 			typeImplementationPROGRAM(root);
 			noErrors();
+		}
+	} else if(strcmp("codegen", command) == 0) {
+		if(yyparse() == 0) {
+			symPROGRAM(root);
+			noErrors();
+			typeImplementationPROGRAM(root);
+			noErrors();
+			initializeCode(stdout);
+			codePROGRAM(root);
 		}
 	}
 	return 1;
