@@ -6,9 +6,8 @@
 
 var n: int = 1111;
 var rev: int = 0;
+var num: int = 10;
 
-if rev == n {
-    print "is palindrome";
-} else {
-    print "is not palindrome";
+if n {
+    print n;
 }

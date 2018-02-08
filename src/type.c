@@ -158,6 +158,7 @@ void typeImplementationSTATEMENT(STATEMENT* s) {
             assignmentTypeMatches(identifierSymbol->val.var, s->val.assignment.value);
             break;
         case k_statementKindIfElse:
+            printf("ifelse expr %d", s->val.ifelseblock.expr->kind);
             typeImplementationEXP(s->val.ifelseblock.expr);
             ifElseWhileTypeMatches(s->val.ifelseblock.expr);
             typeImplementationSTATEMENT(s->val.ifelseblock.bodyblock);
@@ -190,7 +191,9 @@ void typeImplementationEXP(EXP* e) {
         case k_expressionKindStringLiteral:
             e->inferredType = t_typeString;
             break;
-        case k_expressionKindIdentifier: // nothing to do
+        case k_expressionKindIdentifier:
+            // infer the type based on the symbol table
+            e->inferredType = getSymbol(mainSymbolTable, e->val.identifer)->val.var->val.decl.type;
             break;
         case k_expressionKindAddition:
         case k_expressionKindSubtraction:

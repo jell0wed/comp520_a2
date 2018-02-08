@@ -40,6 +40,7 @@ void codeVAR_DECL(VAR_DECL* v) {
         case k_variableDeclKindDecl:
             fprintf(codeFile, "%s %s = ", typeToCStr(v->val.decl.type), v->val.decl.identifier->val.identifer);
             codeEXP(v->val.decl.value);
+            fprintf(codeFile, ";");
             break;
     }
     fprintf(codeFile, "\n");
