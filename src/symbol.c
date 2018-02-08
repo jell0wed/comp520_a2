@@ -117,11 +117,10 @@ void symImplementationSTATEMENT(SymbolTable* t, STATEMENT* s) {
             break;
         case k_statementKindRead:
             // make sure the identifier is declared
-            symImplementationEXP(t, s->val.unary_stmt.identifier);
+            symImplementationEXP(t, s->val.unary_stmt.e);
             break;
         case k_statementKindPrint:
-            // make sure the identifier is declared
-            symImplementationEXP(t, s->val.unary_stmt.identifier);
+            symImplementationEXP(t, s->val.unary_stmt.e);
             break;
         case k_statementKindAssignment:
             // make sure the idenfifier is declared

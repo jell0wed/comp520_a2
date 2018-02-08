@@ -34,7 +34,7 @@ struct STATEMENT {
     enum StatementKind kind;
     int lineno;
     union {
-        struct { EXP* identifier; } unary_stmt;
+        struct { EXP* e; } unary_stmt;
         struct { EXP* identifier; EXP* value; } assignment;
         struct { EXP* expr; STATEMENT* bodyblock; STATEMENT* elseblock; } ifelseblock;
         struct { EXP* expr; STATEMENT* bodyblock; } whileblock;
@@ -70,7 +70,7 @@ VAR_DECL *makeVARDECL_varDeclaration(EXP* identifier, enum AllowedTypes type, EX
 VAR_DECL *makeVARDECL_varDeclarationList(VAR_DECL* vardec, VAR_DECL* next, int lineno);
 
 STATEMENT *makeSTATEMENT_readStatement(EXP* identifier, int lineno);
-STATEMENT *makeSTATEMENT_printStatement(EXP* identifier, int lineno);
+STATEMENT *makeSTATEMENT_printStatement(EXP* e, int lineno);
 STATEMENT *makeSTATEMENT_assignmentStatement(EXP* identifier, EXP* value, int lineno);
 STATEMENT *makeSTATEMENT_ifElseStatement(EXP* expr, STATEMENT* bodyblock, STATEMENT* elseblock, int lineno);
 STATEMENT *makeSTATEMENT_whileStatement(EXP* expr, STATEMENT* bodyblock, int lineno);

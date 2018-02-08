@@ -81,7 +81,7 @@ VAR_DECL *makeVARDECL_varDeclarationList(VAR_DECL* vardec, VAR_DECL* next, int l
 
     if(next->kind != k_variableDeclKindDecl || next->kind != k_variableDeclKindDeclList) {
         // signal error
-    }
+    } 
 
     VAR_DECL *v = malloc(sizeof(VAR_DECL));
     v->lineno = lineno;
@@ -100,19 +100,15 @@ STATEMENT *makeSTATEMENT_readStatement(EXP* identifier, int lineno) {
     STATEMENT *s = malloc(sizeof(STATEMENT));
     s->lineno = lineno;
     s->kind = k_statementKindRead;
-    s->val.unary_stmt.identifier = identifier;
+    s->val.unary_stmt.e = identifier;
     return s;
 }
 
-STATEMENT *makeSTATEMENT_printStatement(EXP* identifier, int lineno) {
-    if(identifier->kind != k_expressionKindIdentifier) {
-        // signal error
-    }
-
+STATEMENT *makeSTATEMENT_printStatement(EXP* e, int lineno) {
     STATEMENT *s = malloc(sizeof(STATEMENT));
     s->lineno = lineno;
     s->kind = k_statementKindPrint;
-    s->val.unary_stmt.identifier = identifier;
+    s->val.unary_stmt.e = e;
     return s;
 }
 

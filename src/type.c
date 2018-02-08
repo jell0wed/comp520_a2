@@ -165,7 +165,10 @@ void typeImplementationSTATEMENT(STATEMENT* s) {
             typeImplementationEXP(s->val.whileblock.expr);
             ifElseWhileTypeMatches(s->val.whileblock.expr);
             break;
-        
+        case k_statementKindRead:
+        case k_statementKindPrint:
+            typeImplementationEXP(s->val.unary_stmt.e);
+            break;
     }
 }
 
