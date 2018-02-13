@@ -1989,14 +1989,16 @@ int main(int argc, char* argv[]) {
 			symPROGRAM(root);
 			noErrors();
 			printSymbolTable(mainSymbolTable);
+			return 0;
 		}
-		return 0;
 	} else if (strcmp("typecheck", command) == 0) {
 		if(yyparse() == 0) {
 			symPROGRAM(root);
 			noErrors();
 			typeImplementationPROGRAM(root);
 			noErrors();
+			printf("OK");
+			return 0;
 		}
 	} else if(strcmp("codegen", command) == 0) {
 		if(yyparse() == 0) {

@@ -1,0 +1,5 @@
+var a: int = 0;
+
+print a;
+read b; // b is undeclared
+b = 5; // b is undeclared

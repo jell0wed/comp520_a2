@@ -1,0 +1,2 @@
+var testString: string = "test string" * 0.2; // should not work fine!!!
+print testString;

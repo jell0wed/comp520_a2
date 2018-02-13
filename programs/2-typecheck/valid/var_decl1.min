@@ -1,0 +1,3 @@
+var test: float = (2 + 0.5); // should resolve to float, which is fine :)
+
+print test;

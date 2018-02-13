@@ -1,0 +1,7 @@
+var a: string = "test";
+var b: int = 0;
+var b: string = "test2";
+var a: float = 0.1416;
+
+print a;
+read b;
