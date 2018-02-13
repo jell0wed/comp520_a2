@@ -8,8 +8,10 @@ void codePREAMBLE() {
     fprintf(codeFile, "#include <stdio.h>\n");
     fprintf(codeFile, "#define TRUE 1\n");
     fprintf(codeFile, "#define FALSE 0\n");
+    fprintf(codeFile, "char __READ_BOOL[5];\n");
     fprintf(codeFile, "char* strconcat(char* str, int num) { char buf[1024] = \"\"; for(int i = 0; i < num; i++) { strcat(buf, str); } return strdup(buf); }\n");
     fprintf(codeFile, "char* strplus(char* str1, char* str2) { char buf[1024] = \"\"; strcat(buf, str1); strcat(buf, str2); return strdup(buf); }\n");
+    fprintf(codeFile, "void readBool(int* boolVal) { if (strcmp(__READ_BOOL, \"TRUE\") == 0) { *boolVal = TRUE; } else if (strcmp(__READ_BOOL, \"FALSE\") == 0) { *boolVal = FALSE; } else { printf(\"Error! Bool value readed is invalid\"); exit(1); } } \n");
     fprintf(codeFile, "\n");
     fprintf(codeFile, "int main(int argc, char* argv[]) {\n");
 }
@@ -56,6 +58,13 @@ void codeSTATEMENT(STATEMENT* s) {
             codeSTATEMENT(s->val.stmt_list.stmt);
             break;
         case k_statementKindRead:
+            // bonus points 8) read bool as strings
+            if(s->val.unary_stmt->inferredType == t_typeBool) {
+                fprintf(codeFile, "scanf(\"%s\", __READ_BOOL);\n", "%s");
+                fprintf(codeFile, "readBool(&%s);", s->val.unary_stmt->val.identifer); 
+                break;
+            }
+
             fprintf(codeFile, "scanf(\"%s\", %s);", 
                     typeToCStrType(s->val.unary_stmt->inferredType), 
                     s->val.unary_stmt->val.identifer); // it must be the case that it is an identifier

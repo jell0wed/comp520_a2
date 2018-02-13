@@ -1,0 +1,5 @@
+var testBool: bool = FALSE;
+
+read testBool;
+
+print testBool;
