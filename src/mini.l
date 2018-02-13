@@ -28,7 +28,7 @@ ALLOWED_DATATYPES (float|boolean|int|string)
 !=                          { if (g_token) { printf("tNOTEQUALS\n"); }return tNOTEQUALS; }
 &&                          { if (g_token) { printf("tAND\n"); }return tAND; }
 \|\|                        { if (g_token) { printf("tOR\n"); } return tOR; } 
-!                           { if (g_token) { printf("tNOT\n"); }return tNOT; }
+!                           { if (g_token) { printf("tNEGATE\n"); } return tNEGATE; }
 
 \(                          ;
 \)                          ;

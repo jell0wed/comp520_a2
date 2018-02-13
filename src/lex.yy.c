@@ -894,7 +894,7 @@ YY_RULE_SETUP
 case 15:
 YY_RULE_SETUP
 #line 31 "mini.l"
-{ if (g_token) { printf("tNOT\n"); }return tNOT; }
+{ if (g_token) { printf("tNEGATE\n"); } return tNEGATE; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP

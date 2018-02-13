@@ -1,8 +1,13 @@
 var testInt: int = 11;
 var testFloat: float = 11.11;
+var testBool: bool = FALSE;
 
 testInt = -testInt;
 testFloat = -testFloat;
 
 print testInt;
 print testFloat;
+
+testBool = !testBool;
+
+print testBool;
