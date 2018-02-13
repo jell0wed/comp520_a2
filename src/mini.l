@@ -2,11 +2,15 @@
 #include <stdio.h>
 #include "mini.tab.h"
 int g_token = 0;
+
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
+
 %}
 ALLOWED_CHARS [ a-zA-Z0-9~@#\$%\^&\*\-\+/`<>=_|\'\.\?,;:!^\{\}\[\]\(\)\a\b\f\n\r\t\v)]
 ALLOWED_IDENTIFIER [a-zA-Z_][a-zA-Z_0-9]*
 ALLOWED_DATATYPES (float|boolean|int|string)
 %option noyywrap
+%option yylineno
 %%
 [ \t\n\r]+				    ;
 \/\/([^\n]+)                ;

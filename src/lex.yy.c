@@ -166,7 +166,20 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
 
-    #define YY_LESS_LINENO(n)
+    /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
+     *       access to the local variable yy_act. Since yyless() is a macro, it would break
+     *       existing scanners that call yyless() from OUTSIDE yylex. 
+     *       One obvious solution it to make yy_act a global. I tried that, and saw
+     *       a 5% performance hit in a non-yylineno scanner, because yy_act is
+     *       normally declared as a register variable-- so it is not worth it.
+     */
+    #define  YY_LESS_LINENO(n) \
+            do { \
+                yy_size_t yyl;\
+                for ( yyl = n; yyl < yyleng; ++yyl )\
+                    if ( yytext[yyl] == '\n' )\
+                        --yylineno;\
+            }while(0)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -502,6 +515,12 @@ static yyconst flex_int16_t yy_chk[172] =
        89
     } ;
 
+/* Table of booleans, true if rule could match eol. */
+static yyconst flex_int32_t yy_rule_can_match_eol[36] =
+    {   0,
+1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,     };
+
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
 
@@ -521,7 +540,10 @@ char *yytext;
 #include <stdio.h>
 #include "mini.tab.h"
 int g_token = 0;
-#line 525 "lex.yy.c"
+
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
+
+#line 547 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -703,9 +725,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 10 "mini.l"
+#line 14 "mini.l"
 
-#line 709 "lex.yy.c"
+#line 731 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -777,6 +799,16 @@ yy_find_action:
 
 		YY_DO_BEFORE_ACTION;
 
+		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
+			{
+			yy_size_t yyl;
+			for ( yyl = 0; yyl < yyleng; ++yyl )
+				if ( yytext[yyl] == '\n' )
+					   
+    yylineno++;
+;
+			}
+
 do_action:	/* This label is used only to access EOF actions. */
 
 		switch ( yy_act )
@@ -791,168 +823,168 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 11 "mini.l"
+#line 15 "mini.l"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 12 "mini.l"
+#line 16 "mini.l"
 ;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 13 "mini.l"
+#line 17 "mini.l"
 ;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 14 "mini.l"
+#line 18 "mini.l"
 { if (g_token) { printf("tSEMICOLON\n"); }  return tSEMICOLON; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 16 "mini.l"
+#line 20 "mini.l"
 { if (g_token) { printf("tBEGIN\n"); }  return tBEGIN; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 17 "mini.l"
+#line 21 "mini.l"
 { if (g_token) { printf("tEND\n"); } return tEND; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 19 "mini.l"
+#line 23 "mini.l"
 { if (g_token) { printf("tPLUS\n"); } return tPLUS; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 20 "mini.l"
+#line 24 "mini.l"
 { if (g_token) { printf("tMINUS\n"); }return tMINUS; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 21 "mini.l"
+#line 25 "mini.l"
 { if (g_token) { printf("tTIMES\n"); }return tTIMES; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "mini.l"
+#line 26 "mini.l"
 { if (g_token) { printf("tDIV\n"); }return tDIV; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 23 "mini.l"
+#line 27 "mini.l"
 { if (g_token) { printf("tEQUALS\n"); }return tEQUALS; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 24 "mini.l"
+#line 28 "mini.l"
 { if (g_token) { printf("tNOTEQUALS\n"); }return tNOTEQUALS; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 25 "mini.l"
+#line 29 "mini.l"
 { if (g_token) { printf("tAND\n"); }return tAND; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 26 "mini.l"
+#line 30 "mini.l"
 { if (g_token) { printf("tOR\n"); } tOR; } 
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 27 "mini.l"
+#line 31 "mini.l"
 { if (g_token) { printf("tNOT\n"); }return tNOT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 29 "mini.l"
+#line 33 "mini.l"
 ;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 30 "mini.l"
+#line 34 "mini.l"
 ;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 32 "mini.l"
+#line 36 "mini.l"
 { if (g_token) { printf("tREAD\n"); } return tREAD; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 33 "mini.l"
+#line 37 "mini.l"
 { if (g_token) { printf("tPRINT\n"); } return tPRINT; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 34 "mini.l"
+#line 38 "mini.l"
 { if (g_token) { printf("tASSIGN\n"); } return tASSIGN; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 35 "mini.l"
+#line 39 "mini.l"
 { if (g_token) { printf("tIF\n"); } return tIF; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 36 "mini.l"
+#line 40 "mini.l"
 { if (g_token) { printf("tELSE\n"); } return tELSE; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 37 "mini.l"
+#line 41 "mini.l"
 { if (g_token) { printf("tWHILE\n"); } return tWHILE; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 39 "mini.l"
+#line 43 "mini.l"
 { if (g_token) { printf("tVARDECL\n"); } return tVARDECL; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 40 "mini.l"
+#line 44 "mini.l"
 { if (g_token) { printf("tTINTEGER\n"); } return tTINTEGER; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 41 "mini.l"
+#line 45 "mini.l"
 { if (g_token) { printf("tTFLOAT\n"); } return tTFLOAT; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 42 "mini.l"
+#line 46 "mini.l"
 { if (g_token) { printf("tTBOOLEAN\n"); } return tTBOOLEAN; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 43 "mini.l"
+#line 47 "mini.l"
 { if (g_token) { printf("tTSTRING\n"); } return tTSTRING; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 45 "mini.l"
+#line 49 "mini.l"
 { yylval.boolval = strcmp("TRUE", yytext) == 0 ? 1 : 0;
                               if (g_token) { printf("tBOOLEAN(%d)\n", yylval.boolval); }
                               return tBOOLEAN; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 48 "mini.l"
+#line 52 "mini.l"
 { yylval.intval = atoi(yytext);
                               if (g_token) { printf("tINTEGER(%d)\n", yylval.intval); }
                               return tINTEGER; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 51 "mini.l"
+#line 55 "mini.l"
 { yylval.floatval = atof(yytext);
                               if (g_token) { printf("tFLOAT(%.6f)\n", yylval.floatval); }
                               return tFLOAT; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 55 "mini.l"
+#line 59 "mini.l"
 { yylval.identifierval = strdup(yytext);
                               if (g_token) { printf("tIDENTIFIER(%s)\n", yylval.identifierval); }
                               return tIDENTIFIER; }
@@ -960,7 +992,7 @@ YY_RULE_SETUP
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 58 "mini.l"
+#line 62 "mini.l"
 {   int n = strlen(yytext);
                                 char* cpy = malloc((n - 2 + 1) * sizeof(char));
                                 strncpy(cpy, yytext + sizeof(char), n - 2); 
@@ -971,15 +1003,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 66 "mini.l"
+#line 70 "mini.l"
 { fprintf(stderr, "Error: unexpected char '%s'", yytext); exit(1); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 67 "mini.l"
+#line 71 "mini.l"
 ECHO;
 	YY_BREAK
-#line 983 "lex.yy.c"
+#line 1015 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1340,6 +1372,10 @@ static int yy_get_next_buffer (void)
 
 	*--yy_cp = (char) c;
 
+    if ( c == '\n' ){
+        --yylineno;
+    }
+
 	(yytext_ptr) = yy_bp;
 	(yy_hold_char) = *yy_cp;
 	(yy_c_buf_p) = yy_cp;
@@ -1414,6 +1450,11 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
+
+	if ( c == '\n' )
+		   
+    yylineno++;
+;
 
 	return c;
 }
@@ -1884,6 +1925,9 @@ static int yy_init_globals (void)
      * This function is called from yylex_destroy(), so don't allocate here.
      */
 
+    /* We do not touch yylineno unless the option is enabled. */
+    yylineno =  1;
+    
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -1976,7 +2020,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 67 "mini.l"
+#line 71 "mini.l"
 
 
 
