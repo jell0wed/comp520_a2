@@ -68,7 +68,8 @@ EXP *makeEXP_numNegate(EXP* ref, int lineno) {
 VAR_DECL *makeVARDECL_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val, int lineno) {
     // make sure identifier is an identifier
     if(identifier->kind != k_expressionKindIdentifier) {
-        // signal error
+        reportError("expected an identifier in variable declaration", lineno);
+        noErrors();
     }
 
     VAR_DECL *v = malloc(sizeof(VAR_DECL));
@@ -82,13 +83,15 @@ VAR_DECL *makeVARDECL_varDeclaration(EXP* identifier, enum AllowedTypes type, EX
 }
 
 VAR_DECL *makeVARDECL_varDeclarationList(VAR_DECL* vardec, VAR_DECL* next, int lineno) {
-    // make sure vardec is a variable declaration
+    // make sure vardec is a variable declaration (shouldnt happen due to grammar)
     if(vardec->kind != k_variableDeclKindDecl) {
-        // signal error
+        reportError("expected a variable declaraion in variable declaration list", lineno);
+        noErrors();
     }
 
     if(next->kind != k_variableDeclKindDecl || next->kind != k_variableDeclKindDeclList) {
-        // signal error
+        reportError("next variable declaration seems invalid", lineno);
+        noErrors();
     } 
 
     VAR_DECL *v = malloc(sizeof(VAR_DECL));
@@ -102,7 +105,8 @@ VAR_DECL *makeVARDECL_varDeclarationList(VAR_DECL* vardec, VAR_DECL* next, int l
 
 STATEMENT *makeSTATEMENT_readStatement(EXP* identifier, int lineno) {
     if(identifier->kind != k_expressionKindIdentifier) {
-        // signal error
+        reportError("expected an identifier for read statement", lineno);
+        noErrors();
     }
 
     STATEMENT *s = malloc(sizeof(STATEMENT));
@@ -122,7 +126,8 @@ STATEMENT *makeSTATEMENT_printStatement(EXP* e, int lineno) {
 
 STATEMENT *makeSTATEMENT_assignmentStatement(EXP* identifier, EXP* value, int lineno) {
     if(identifier->kind != k_expressionKindIdentifier) {
-        // signal error
+        reportError("expected an identifier for assignment", lineno);
+        noErrors();
     }
 
     STATEMENT *s = malloc(sizeof(STATEMENT));

@@ -1,0 +1,3 @@
+var testInt: int = 0;
+
+read "test";
