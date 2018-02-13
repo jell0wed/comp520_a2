@@ -8,6 +8,7 @@ void codePREAMBLE() {
     fprintf(codeFile, "#include <stdio.h>\n");
     fprintf(codeFile, "#define TRUE 1\n");
     fprintf(codeFile, "#define FALSE 0\n");
+    fprintf(codeFile, "char* strconcat(char* str, int num) { char buf[1024] = \"\"; for(int i = 0; i < num; i++) { strcat(buf, str); } return strdup(buf); }\n");
     fprintf(codeFile, "\n");
     fprintf(codeFile, "int main(int argc, char* argv[]) {\n");
 }
@@ -125,6 +126,16 @@ void codeEXP(EXP* e) {
             fprintf(codeFile, ")");
             break;
         case k_expressionKindMultiplication:
+            // handle non std c case with string multiplication ;)
+            if(e->val.binary.lhs->inferredType == t_typeString && 
+                e->val.binary.rhs->inferredType == t_typeInteger) {
+                int numRepeat = e->val.binary.rhs->val.intLiteral;
+                fprintf(codeFile, "strconcat(");
+                codeEXP(e->val.binary.lhs);
+                fprintf(codeFile, ", %d)", numRepeat);
+                break;
+            }
+
             fprintf(codeFile, "(");
             codeEXP(e->val.binary.lhs);
             fprintf(codeFile, " * ");
