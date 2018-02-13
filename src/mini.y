@@ -151,7 +151,11 @@ int main(int argc, char* argv[]) {
 		return 0;
 	} else if (strcmp("parse", command) == 0) {
 		if(yyparse() == 0) {
-			//printf("OK");
+			printf("OK");
+			return 0;
+		}
+	} else if(strcmp("pretty", command) == 0) {
+		if(yyparse() == 0) {
 			prettyPROGRAM(root);
 			return 0;
 		}

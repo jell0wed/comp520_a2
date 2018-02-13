@@ -5,70 +5,102 @@ void prettyPROGRAM(PROGRAM *p) {
     if(p->variable_decls != 0) {
         prettyVAR_DECL(p->variable_decls);
     }
+    printf("\n");
 
     if(p->statements != 0) {
         prettySTATEMENT(p->statements);
     }
 }
 
+void prettyTYPE(enum AllowedTypes type) {
+    switch(type) {
+        case t_typeInteger:
+            printf("int"); break;
+        case t_typeFloat:
+            printf("float"); break;
+        case t_typeBool:
+            printf("bool"); break;
+        case t_typeString:
+            printf("string"); break;
+    }
+}
+
 void prettyVAR_DECL(VAR_DECL *v) {
+    if(v == 0) { return; }
     switch(v->kind) {
+        case k_variableDeclKindDeclList:
+            prettyVAR_DECL(v->val.var_decl_list.next);
+            prettyVAR_DECL(v->val.var_decl_list.var_decl);
+            return;
         case k_variableDeclKindDecl:
             printf("var ");
             prettyEXP(v->val.decl.identifier);
             printf(": ");
-            switch(v->val.decl.type) {
-                case t_typeInteger:
-                    printf("int"); break;
-                case t_typeFloat:
-                    printf("float"); break;
-                case t_typeBool:
-                    printf("bool"); break;
-                case t_typeString:
-                    printf("string"); break;
-            }
+            prettyTYPE(v->val.decl.type);
             printf(" = ");
             prettyEXP(v->val.decl.value);
-            printf("\n");
-            break;
-        case k_variableDeclKindDeclList:
-            prettyVAR_DECL(v->val.var_decl_list.next);
-            prettyVAR_DECL(v->val.var_decl_list.var_decl);
             break;
     }
+    printf(";");
+    printf("\n");
 }
-
+int ident = 0;
+int currentIdent = 0;
+void autoIdent() {
+    for(int i = currentIdent; i < ident; i++) {
+        printf("\t");
+        currentIdent++;
+    }
+}
+void newLine() {
+    currentIdent = 0;
+    printf("\n");
+}
 void prettySTATEMENT(STATEMENT *s) {
+    if(s == 0) { return; }
+    autoIdent();
     switch(s->kind) {
+        case k_statementKIndStatementList:
+            prettySTATEMENT(s->val.stmt_list.next);
+            prettySTATEMENT(s->val.stmt_list.stmt);
+            return;
         case k_statementKindRead:
             printf("read ");
             prettyEXP(s->val.unary_stmt);
-            printf("\n");
+            printf(";");
             break;
         case k_statementKindPrint:
             printf("print ");
             prettyEXP(s->val.unary_stmt);
-            printf("\n");
+            printf(";");
             break;
         case k_statementKindAssignment:
             prettyEXP(s->val.assignment.identifier);
             printf(" = ");
             prettyEXP(s->val.assignment.value);
-            printf("\n");
+            printf(";");
             break;
         case k_statementKindIfElse:
             printf("if (");
             prettyEXP(s->val.ifelseblock.expr);
             printf(") ");
             printf("{");
-            printf("\n");
+            newLine();
+            ident++;
             prettySTATEMENT(s->val.ifelseblock.bodyblock);
-            printf("}");
+            ident--;
             if(s->val.ifelseblock.elseblock != 0) {
-                printf(" else ");
+                autoIdent();
+                printf("} else ");
                 printf("{");
-                printf("\n");
+                newLine();
+                ident++;
                 prettySTATEMENT(s->val.ifelseblock.elseblock);
+                ident--;
+                autoIdent();
+                printf("}");
+            } else {
+                autoIdent();
                 printf("}");
             }
             break;
@@ -77,16 +109,15 @@ void prettySTATEMENT(STATEMENT *s) {
             prettyEXP(s->val.whileblock.expr);
             printf(") ");
             printf("{");
-            printf("\n");
+            newLine();
+            ident++;
             prettySTATEMENT(s->val.whileblock.bodyblock);
+            ident--;
+            autoIdent();
             printf("}");
-            printf("\n");
-            break;
-        case k_statementKIndStatementList:
-            prettySTATEMENT(s->val.stmt_list.next);
-            prettySTATEMENT(s->val.stmt_list.stmt);
             break;
     }
+    newLine();
 }
 
 void prettyEXP(EXP *e) {
@@ -95,10 +126,10 @@ void prettyEXP(EXP *e) {
             printf("%d", e->val.intLiteral);
             break;
         case k_expressionKindFloatLiteral:
-            printf("%.f", e->val.floatLiteral);
+            printf("%.5f", e->val.floatLiteral);
             break;
         case k_expressionKindStringLiteral:
-            printf("%s", e->val.stringLiteral);
+            printf("\"%s\"", e->val.stringLiteral);
             break;
         case k_expressionKindBooleanLiteral:
             printf("%d", e->val.boolLiteral);
