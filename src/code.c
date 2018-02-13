@@ -11,7 +11,8 @@ void codePREAMBLE() {
     fprintf(codeFile, "char __READ_BOOL[5];\n");
     fprintf(codeFile, "char* strconcat(char* str, int num) { char buf[1024] = \"\"; for(int i = 0; i < num; i++) { strcat(buf, str); } return strdup(buf); }\n");
     fprintf(codeFile, "char* strplus(char* str1, char* str2) { char buf[1024] = \"\"; strcat(buf, str1); strcat(buf, str2); return strdup(buf); }\n");
-    fprintf(codeFile, "void readBool(int* boolVal) { if (strcmp(__READ_BOOL, \"TRUE\") == 0) { *boolVal = TRUE; } else if (strcmp(__READ_BOOL, \"FALSE\") == 0) { *boolVal = FALSE; } else { printf(\"Error! Bool value readed is invalid\"); exit(1); } } \n");
+    fprintf(codeFile, "void readBool(int* boolVal) { if (strcmp(__READ_BOOL, \"TRUE\") == 0) { *boolVal = TRUE; } else if (strcmp(__READ_BOOL, \"FALSE\") == 0) { *boolVal = FALSE; } else { fprintf(stderr, \"Error! Bool value readed is invalid\"); exit(1); } } \n");
+    fprintf(codeFile, "char* printBool(int boolVal) { return boolVal == TRUE ? \"TRUE\" : \"FALSE\"; }\n");
     fprintf(codeFile, "\n");
     fprintf(codeFile, "int main(int argc, char* argv[]) {\n");
 }
@@ -70,6 +71,14 @@ void codeSTATEMENT(STATEMENT* s) {
                     s->val.unary_stmt->val.identifer); // it must be the case that it is an identifier
             break;
         case k_statementKindPrint:
+            // bonus points 8) print bool as TRUE or FALSE
+            if(s->val.unary_stmt->inferredType == t_typeBool) {
+                fprintf(codeFile, "printf(\"%s\", printBool(", "%s");
+                codeEXP(s->val.unary_stmt);
+                fprintf(codeFile, "));");
+                break;
+            }
+
             fprintf(codeFile, "printf(\"%s\", ", typeToCStrType(s->val.unary_stmt->inferredType));
             codeEXP(s->val.unary_stmt);
             fprintf(codeFile, ");");
