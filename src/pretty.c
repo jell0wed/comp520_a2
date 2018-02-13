@@ -197,6 +197,13 @@ void prettyEXP(EXP *e) {
             break;
 
         case k_expressionKindNegate:
+            printf("!");
+            printf("(");
+            prettyEXP(e->val.unary);
+            printf(")");
+            break;
+        
+        case k_expressionKindNumNegate:
             printf("-");
             printf("(");
             prettyEXP(e->val.unary);

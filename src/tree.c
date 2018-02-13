@@ -57,6 +57,14 @@ EXP *makeEXP_negate(EXP* ref, int lineno) {
     return e;
 }
 
+EXP *makeEXP_numNegate(EXP* ref, int lineno) {
+    EXP *e = malloc(sizeof(EXP));
+    e->lineno = lineno;
+    e->kind = k_expressionKindNumNegate;
+    e->val.unary = ref;
+    return e;
+}
+
 VAR_DECL *makeVARDECL_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val, int lineno) {
     // make sure identifier is an identifier
     if(identifier->kind != k_expressionKindIdentifier) {

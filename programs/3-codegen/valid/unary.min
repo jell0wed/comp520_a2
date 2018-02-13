@@ -1,0 +1,8 @@
+var testInt: int = 11;
+var testFloat: float = 11.11;
+
+testInt = -testInt;
+testFloat = -testFloat;
+
+print testInt;
+print testFloat;

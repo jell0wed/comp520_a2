@@ -123,8 +123,7 @@ binary_expr:
 
 unary_expr:
 	  tNEGATE expr { $$ = makeEXP_negate($2, @1.first_line); }
-	| tMINUS tINTEGER { $$ = makeEXP_intLiteral($2 * -1, @1.first_line); } 
-	| tMINUS tFLOAT { $$ = makeEXP_intLiteral($2 * -1.0, @1.first_line); }
+	| tMINUS expr { $$ = makeEXP_numNegate($2, @1.first_line); }
 ;
 %%
 

@@ -214,6 +214,14 @@ void typeImplementationEXP(EXP* e) {
                 }
             }
             break;
+        case k_expressionKindNumNegate:
+            typeImplementationEXP(e->val.unary);
+            if(e->val.unary->inferredType != t_typeInteger && e->val.unary->inferredType != t_typeFloat) {
+                reportError("numerical negation must be applied on float or ints only", e->lineno);
+            } else {
+                e->inferredType = e->val.unary->inferredType;
+            }
+            break;
         case k_expressionKindNegate:
             typeImplementationEXP(e->val.unary);
             if(checkBOOL(e->val.unary->inferredType, e->lineno)) {

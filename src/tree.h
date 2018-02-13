@@ -65,6 +65,7 @@ EXP *makeEXP_stringLiteral(char* stringLiteral, int lineno);
 EXP *makeEXP_identifier(char* identifier, int lineno);
 EXP *makeEXP_binary(enum ExpressionKind k, EXP* lhs, EXP* rhs, int lineno);
 EXP *makeEXP_negate(EXP* e, int lineno);
+EXP *makeEXP_numNegate(EXP* e, int lineno);
 
 VAR_DECL *makeVARDECL_varDeclaration(EXP* identifier, enum AllowedTypes type, EXP* val, int lineno);
 VAR_DECL *makeVARDECL_varDeclarationList(VAR_DECL* vardec, VAR_DECL* next, int lineno);

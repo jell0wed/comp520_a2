@@ -210,6 +210,11 @@ void codeEXP(EXP* e) {
             codeEXP(e->val.binary.rhs);
             fprintf(codeFile, ")");
             break;
+        case k_expressionKindNumNegate:
+            fprintf(codeFile, "-(");
+            codeEXP(e->val.unary);
+            fprintf(codeFile, ")");
+            break;
         case k_expressionKindNegate:
             fprintf(codeFile, "!(");
             codeEXP(e->val.unary);

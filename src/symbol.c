@@ -167,9 +167,11 @@ void symImplementationEXP(SymbolTable* t, EXP* e) {
             symImplementationEXP(t, e->val.binary.lhs);
             symImplementationEXP(t, e->val.binary.rhs);
             break;
+        case k_expressionKindNumNegate:
         case k_expressionKindNegate:
             symImplementationEXP(t, e->val.unary);
             break;
+
     }
 }
 
