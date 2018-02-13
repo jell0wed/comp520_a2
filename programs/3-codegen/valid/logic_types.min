@@ -1,0 +1,19 @@
+var testInt: int = 1;
+var testBool: bool = FALSE;
+var shouldBeBool: bool = FALSE;
+
+print shouldBeBool;
+
+shouldBeBool = testInt || testInt;
+print shouldBeBool;
+shouldBeBool = testInt || testBool;
+print shouldBeBool;
+shouldBeBool = testBool || testBool;
+print shouldBeBool;
+
+shouldBeBool = testInt && testInt;
+print shouldBeBool;
+shouldBeBool = testInt && testBool;
+print shouldBeBool;
+shouldBeBool = testBool && testBool;
+print shouldBeBool;

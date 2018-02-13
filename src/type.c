@@ -205,6 +205,14 @@ void typeImplementationEXP(EXP* e) {
             typeImplementationEXP(e->val.binary.lhs);
             typeImplementationEXP(e->val.binary.rhs);
             typeImplementationBinaryEXP(e);
+            // check for string * int runtime exceptions
+            if(e->kind == k_expressionKindMultiplication) {
+                if(e->val.binary.lhs->inferredType == t_typeString && e->val.binary.rhs->inferredType == t_typeInteger) {
+                    if(e->val.binary.rhs->val.intLiteral < 0) {
+                        reportError("string multiplicator must be >= 0", e->lineno);
+                    }
+                }
+            }
             break;
         case k_expressionKindNegate:
             typeImplementationEXP(e->val.unary);

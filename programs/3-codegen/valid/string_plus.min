@@ -1,0 +1,4 @@
+var test: string = "test string 1";
+var test2: string = " plus test string 2";
+
+print test + test2;

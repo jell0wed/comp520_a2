@@ -1,0 +1,26 @@
+var shouldBeBool: bool = FALSE;
+
+shouldBeBool = 1 == 1;
+print shouldBeBool;
+
+shouldBeBool = 1.0 == 1.0;
+print shouldBeBool;
+
+shouldBeBool = "string" == "string";
+print shouldBeBool;
+
+shouldBeBool = FALSE == FALSE;
+print shouldBeBool;
+
+
+shouldBeBool = 1 != 1;
+print shouldBeBool;
+
+shouldBeBool = 1.0 != 1.0;
+print shouldBeBool;
+
+shouldBeBool = "string" != "string";
+print shouldBeBool;
+
+shouldBeBool = FALSE != FALSE;
+print shouldBeBool;

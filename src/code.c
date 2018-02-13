@@ -9,6 +9,7 @@ void codePREAMBLE() {
     fprintf(codeFile, "#define TRUE 1\n");
     fprintf(codeFile, "#define FALSE 0\n");
     fprintf(codeFile, "char* strconcat(char* str, int num) { char buf[1024] = \"\"; for(int i = 0; i < num; i++) { strcat(buf, str); } return strdup(buf); }\n");
+    fprintf(codeFile, "char* strplus(char* str1, char* str2) { char buf[1024] = \"\"; strcat(buf, str1); strcat(buf, str2); return strdup(buf); }\n");
     fprintf(codeFile, "\n");
     fprintf(codeFile, "int main(int argc, char* argv[]) {\n");
 }
@@ -112,6 +113,16 @@ void codeEXP(EXP* e) {
             fprintf(codeFile, "%s", e->val.identifer);
             break;
         case k_expressionKindAddition:
+            // handle non std c case with string addition ;)
+            if(e->val.binary.lhs->inferredType == t_typeString && 
+                e->val.binary.rhs->inferredType == t_typeString) {
+                fprintf(codeFile, "strplus(");
+                codeEXP(e->val.binary.lhs);
+                fprintf(codeFile, ", ");
+                codeEXP(e->val.binary.rhs);
+                fprintf(codeFile, ")");
+                break;
+            }
             fprintf(codeFile, "(");
             codeEXP(e->val.binary.lhs);
             fprintf(codeFile, " + ");
@@ -134,7 +145,7 @@ void codeEXP(EXP* e) {
                 codeEXP(e->val.binary.lhs);
                 fprintf(codeFile, ", %d)", numRepeat);
                 break;
-            }
+            } 
 
             fprintf(codeFile, "(");
             codeEXP(e->val.binary.lhs);
@@ -150,6 +161,17 @@ void codeEXP(EXP* e) {
             fprintf(codeFile, ")");
             break;
         case k_expressionKindEquals:
+            // handle non std c case for string ;)
+            if(e->val.binary.lhs->inferredType == t_typeString && 
+                e->val.binary.rhs->inferredType == t_typeString) {
+                fprintf(codeFile, "(strcmp(");
+                codeEXP(e->val.binary.lhs);
+                fprintf(codeFile, ", ");
+                codeEXP(e->val.binary.rhs);
+                fprintf(codeFile, ") == 0)");
+                break;
+            }
+
             fprintf(codeFile, "(");
             codeEXP(e->val.binary.lhs);
             fprintf(codeFile, " == ");
@@ -157,6 +179,17 @@ void codeEXP(EXP* e) {
             fprintf(codeFile, ")");
             break;
         case k_expressionKindNotEquals:
+            // handle non std c case for string ;)
+            if(e->val.binary.lhs->inferredType == t_typeString && 
+                e->val.binary.rhs->inferredType == t_typeString) {
+                fprintf(codeFile, "(strcmp(");
+                codeEXP(e->val.binary.lhs);
+                fprintf(codeFile, ", ");
+                codeEXP(e->val.binary.rhs);
+                fprintf(codeFile, ") != 0)");
+                break;
+            }
+
             fprintf(codeFile, "(");
             codeEXP(e->val.binary.lhs);
             fprintf(codeFile, " != ");
