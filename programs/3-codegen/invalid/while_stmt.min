@@ -1,0 +1,5 @@
+var testFloat: float = 0.5;
+
+while testFloat {
+    print "shouldnt work";
+}

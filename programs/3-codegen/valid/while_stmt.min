@@ -1,0 +1,10 @@
+var testBool: bool = FALSE;
+var testInt: int = 0;
+
+while testBool {
+    print "true bool with while stmt";
+}
+
+while testInt {
+    print "true int with while stmt";
+} 

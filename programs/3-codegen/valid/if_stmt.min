@@ -1,0 +1,22 @@
+var testBool: bool = FALSE;
+var testInt: int = 0;
+
+if testBool {
+    print "true bool with else stmt";
+} else {
+    print "false bool with else stmt";
+}
+
+if testInt {
+    print "true int with else stmt";
+} else {
+    print "false int with else stmt";
+}
+
+if testBool {
+    print "true bool with no else stmt";
+}
+
+if testInt {
+    print "true int with no else stmt";
+}

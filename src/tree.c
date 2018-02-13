@@ -89,11 +89,6 @@ VAR_DECL *makeVARDECL_varDeclarationList(VAR_DECL* vardec, VAR_DECL* next, int l
         noErrors();
     }
 
-    if(next->kind != k_variableDeclKindDecl || next->kind != k_variableDeclKindDeclList) {
-        reportError("next variable declaration seems invalid", lineno);
-        noErrors();
-    } 
-
     VAR_DECL *v = malloc(sizeof(VAR_DECL));
     v->lineno = lineno;
     v->kind = k_variableDeclKindDeclList;

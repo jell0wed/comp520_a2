@@ -1,0 +1,9 @@
+var testInt: int = 0;
+var testFloat: float = 0.0;
+var testString: string = "";
+var testBool: bool = FALSE;
+
+read testInt;
+read testFloat;
+read testString;
+read testBool;

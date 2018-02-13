@@ -1,0 +1,15 @@
+var testInt: int = 0;
+var testFloat: float = 0.0;
+var testString: string = "";
+var testBool: bool = FALSE;
+
+testInt = testInt;
+print testInt;
+testFloat = testFloat;
+print testFloat;
+testFloat = testInt;
+print testFloat;
+testString = testString;
+print testString;
+testBool = testBool;
+print testBool;
