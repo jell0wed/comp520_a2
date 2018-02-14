@@ -1,3 +1,5 @@
+// This shouldnt work because float cannot be part of a while expression
+
 var testFloat: float = 0.5;
 
 while testFloat {

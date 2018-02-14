@@ -1,0 +1,5 @@
+// This shouldnt work because the string multiplier must be >= 0
+
+var test: string = "";
+
+print test * -1;

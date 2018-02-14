@@ -1,3 +1,7 @@
+// This program should not work because we are redeclaring a variable
+// in the variable declaration list. Hence it shouldnt pass the 
+// symboltable construction phase
+
 var a: string = "test";
 var b: int = 0;
 var b: string = "test2";

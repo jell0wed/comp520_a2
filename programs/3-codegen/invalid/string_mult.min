@@ -1,3 +1,0 @@
-var test: string = "";
-
-print test * -1;

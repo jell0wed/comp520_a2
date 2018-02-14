@@ -1,3 +1,6 @@
+// This shouldnt work because the numerical negation expression
+// cannot be applied to booleans!
+
 var testBool: bool = FALSE;
 
 print -testBool;

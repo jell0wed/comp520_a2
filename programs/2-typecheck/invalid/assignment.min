@@ -1,3 +1,5 @@
+// This should work because ints are not assignable from floats
+
 var testInt: int = 0;
 var testFloat: float = 0.5;
 

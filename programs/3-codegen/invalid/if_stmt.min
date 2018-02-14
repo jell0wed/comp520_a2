@@ -1,5 +1,0 @@
-var testFloat: float = 0.5;
-
-if testFloat {
-    print "shouldnt work";
-}

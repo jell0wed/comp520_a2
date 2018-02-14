@@ -1,0 +1,5 @@
+// This should not work because the initialized value of testString cannot be evaluated and
+// does not resolve (at all).
+
+var testString: string = "test string" * 0.2; // should not work fine!!!
+print testString;

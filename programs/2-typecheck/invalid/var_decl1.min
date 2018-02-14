@@ -1,3 +1,0 @@
-var atest: string = (1+2 - 0.5); // should resolve to a float
-
-print atest; // should not work

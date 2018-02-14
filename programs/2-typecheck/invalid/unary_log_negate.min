@@ -1,3 +1,8 @@
+// This tests that we cannot apply a logical negation expression to an int
+// this shouldnt pass the typecheck err
+
 var testInt: int = 0;
+var testInt2: int = 1;
 
 print !testInt;
+print !(testInt + testInt2);
