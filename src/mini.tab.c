@@ -1931,7 +1931,7 @@ yyreturn:
 
 int g_token;
 int main(int argc, char* argv[]) {
-	if (argc != 2) {
+	if (argc != 3) {
 		printf(stderr, "Wrong usage. Correct usage: ./mini {scan|tokens|parse} < input.min");
 		return 1;
 	}
@@ -1977,13 +1977,20 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 	} else if(strcmp("codegen", command) == 0) {
+		// create the outfile
+		char* outFilename = argv[2];
+
 		if(yyparse() == 0) {
 			symPROGRAM(root);
 			noErrors();
 			typeImplementationPROGRAM(root);
 			noErrors();
-			initializeCode(stdout);
+			FILE* outFile = fopen(outFilename, "w");
+			initializeCode(outFile);
 			codePROGRAM(root);
+			fclose(outFile);
+			printf("OK");
+			return 0;
 		}
 	}
 	return 1;

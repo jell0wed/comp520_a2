@@ -203,11 +203,22 @@ void printSymbolTable(SymbolTable *t) {
     }
 }
 
+char* ttstr(enum AllowedTypes t) {
+    switch(t) {
+        case t_typeInteger: return "int";
+        case t_typeFloat: return "float";
+        case t_typeString: return "string";
+        case t_typeBool: return "bool";
+    }
+
+    return "";
+}
+
 void printSymbol(SYMBOL* s) {
     if(s == 0) { return; }
     printSymbol(s->next);
     
-    printf("Symbol<%s>(%s)\n", symbolKindToStr(s->kind), s->name);
+    printf("Symbol<%s:%s>(%s)\n", symbolKindToStr(s->kind), ttstr(s->val.var->val.decl.type), s->name);
 }
 
 char* symbolKindToStr(enum SymbolKind k) {
