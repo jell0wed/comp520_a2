@@ -1,0 +1,1331 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: mini
+
+    2 mini: var_dec_list stmt_list
+    3     | stmt_list
+
+    4 var_dec_list: var_dec_list var_dec
+    5             | var_dec
+
+    6 var_dec: tVARDECL identifier tTINTEGER tASSIGN expr tSEMICOLON
+    7        | tVARDECL identifier tTFLOAT tASSIGN expr tSEMICOLON
+    8        | tVARDECL identifier tTBOOLEAN tASSIGN expr tSEMICOLON
+    9        | tVARDECL identifier tTSTRING tASSIGN expr tSEMICOLON
+
+   10 stmt_list: stmt_list stmt
+   11          | stmt
+
+   12 stmt: tREAD identifier tSEMICOLON
+   13     | tPRINT expr tSEMICOLON
+   14     | identifier tASSIGN expr tSEMICOLON
+   15     | tIF expr tBEGIN stmt_list tEND
+   16     | tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND
+   17     | tWHILE expr tBEGIN stmt_list tEND
+
+   18 expr: binary_expr
+   19     | unary_expr
+   20     | identifier
+   21     | litteral
+   22     | '(' expr ')'
+
+   23 identifier: tIDENTIFIER
+
+   24 litteral: tINTEGER
+   25         | tFLOAT
+   26         | tBOOLEAN
+   27         | tSTRING
+
+   28 binary_expr: expr tPLUS expr
+   29            | expr tMINUS expr
+   30            | expr tTIMES expr
+   31            | expr tDIV expr
+   32            | expr tEQUALS expr
+   33            | expr tNOTEQUALS expr
+   34            | expr tAND expr
+   35            | expr tOR expr
+
+   36 unary_expr: tNEGATE expr
+   37           | tMINUS expr
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 22
+')' (41) 22
+error (256)
+tINTEGER (258) 24
+tBOOLEAN (259) 26
+tFLOAT (260) 25
+tSTRING (261) 27
+tIDENTIFIER (262) 23
+tTINTEGER (263) 6
+tTFLOAT (264) 7
+tTBOOLEAN (265) 8
+tTSTRING (266) 9
+tVARDECL (267) 6 7 8 9
+tPLUS (268) 28
+tMINUS (269) 29 37
+tTIMES (270) 30
+tDIV (271) 31
+tEQUALS (272) 32
+tNOTEQUALS (273) 33
+tAND (274) 34
+tOR (275) 35
+tNEGATE (276) 36
+tREAD (277) 12
+tPRINT (278) 13
+tASSIGN (279) 6 7 8 9 14
+tIF (280) 15 16
+tELSE (281) 16
+tWHILE (282) 17
+tBEGIN (283) 15 16 17
+tEND (284) 15 16 17
+tSEMICOLON (285) 6 7 8 9 12 13 14
+
+
+Nonterminals, with rules where they appear
+
+$accept (33)
+    on left: 0
+program (34)
+    on left: 1, on right: 0
+mini (35)
+    on left: 2 3, on right: 1
+var_dec_list (36)
+    on left: 4 5, on right: 2 4
+var_dec (37)
+    on left: 6 7 8 9, on right: 4 5
+stmt_list (38)
+    on left: 10 11, on right: 2 3 10 15 16 17
+stmt (39)
+    on left: 12 13 14 15 16 17, on right: 10 11
+expr (40)
+    on left: 18 19 20 21 22, on right: 6 7 8 9 13 14 15 16 17 22 28
+    29 30 31 32 33 34 35 36 37
+identifier (41)
+    on left: 23, on right: 6 7 8 9 12 14 20
+litteral (42)
+    on left: 24 25 26 27, on right: 21
+binary_expr (43)
+    on left: 28 29 30 31 32 33 34 35, on right: 18
+unary_expr (44)
+    on left: 36 37, on right: 19
+
+
+state 0
+
+    0 $accept: . program $end
+
+    tIDENTIFIER  shift, and go to state 1
+    tVARDECL     shift, and go to state 2
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+
+    program       go to state 7
+    mini          go to state 8
+    var_dec_list  go to state 9
+    var_dec       go to state 10
+    stmt_list     go to state 11
+    stmt          go to state 12
+    identifier    go to state 13
+
+
+state 1
+
+   23 identifier: tIDENTIFIER .
+
+    $default  reduce using rule 23 (identifier)
+
+
+state 2
+
+    6 var_dec: tVARDECL . identifier tTINTEGER tASSIGN expr tSEMICOLON
+    7        | tVARDECL . identifier tTFLOAT tASSIGN expr tSEMICOLON
+    8        | tVARDECL . identifier tTBOOLEAN tASSIGN expr tSEMICOLON
+    9        | tVARDECL . identifier tTSTRING tASSIGN expr tSEMICOLON
+
+    tIDENTIFIER  shift, and go to state 1
+
+    identifier  go to state 14
+
+
+state 3
+
+   12 stmt: tREAD . identifier tSEMICOLON
+
+    tIDENTIFIER  shift, and go to state 1
+
+    identifier  go to state 15
+
+
+state 4
+
+   13 stmt: tPRINT . expr tSEMICOLON
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 23
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 5
+
+   15 stmt: tIF . expr tBEGIN stmt_list tEND
+   16     | tIF . expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 28
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 6
+
+   17 stmt: tWHILE . expr tBEGIN stmt_list tEND
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 29
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 7
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 30
+
+
+state 8
+
+    1 program: mini .
+
+    $default  reduce using rule 1 (program)
+
+
+state 9
+
+    2 mini: var_dec_list . stmt_list
+    4 var_dec_list: var_dec_list . var_dec
+
+    tIDENTIFIER  shift, and go to state 1
+    tVARDECL     shift, and go to state 2
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+
+    var_dec     go to state 31
+    stmt_list   go to state 32
+    stmt        go to state 12
+    identifier  go to state 13
+
+
+state 10
+
+    5 var_dec_list: var_dec .
+
+    $default  reduce using rule 5 (var_dec_list)
+
+
+state 11
+
+    3 mini: stmt_list .
+   10 stmt_list: stmt_list . stmt
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+
+    $default  reduce using rule 3 (mini)
+
+    stmt        go to state 33
+    identifier  go to state 13
+
+
+state 12
+
+   11 stmt_list: stmt .
+
+    $default  reduce using rule 11 (stmt_list)
+
+
+state 13
+
+   14 stmt: identifier . tASSIGN expr tSEMICOLON
+
+    tASSIGN  shift, and go to state 34
+
+
+state 14
+
+    6 var_dec: tVARDECL identifier . tTINTEGER tASSIGN expr tSEMICOLON
+    7        | tVARDECL identifier . tTFLOAT tASSIGN expr tSEMICOLON
+    8        | tVARDECL identifier . tTBOOLEAN tASSIGN expr tSEMICOLON
+    9        | tVARDECL identifier . tTSTRING tASSIGN expr tSEMICOLON
+
+    tTINTEGER  shift, and go to state 35
+    tTFLOAT    shift, and go to state 36
+    tTBOOLEAN  shift, and go to state 37
+    tTSTRING   shift, and go to state 38
+
+
+state 15
+
+   12 stmt: tREAD identifier . tSEMICOLON
+
+    tSEMICOLON  shift, and go to state 39
+
+
+state 16
+
+   24 litteral: tINTEGER .
+
+    $default  reduce using rule 24 (litteral)
+
+
+state 17
+
+   26 litteral: tBOOLEAN .
+
+    $default  reduce using rule 26 (litteral)
+
+
+state 18
+
+   25 litteral: tFLOAT .
+
+    $default  reduce using rule 25 (litteral)
+
+
+state 19
+
+   27 litteral: tSTRING .
+
+    $default  reduce using rule 27 (litteral)
+
+
+state 20
+
+   37 unary_expr: tMINUS . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 40
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 21
+
+   36 unary_expr: tNEGATE . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 41
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 22
+
+   22 expr: '(' . expr ')'
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 42
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 23
+
+   13 stmt: tPRINT expr . tSEMICOLON
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tSEMICOLON  shift, and go to state 51
+
+
+state 24
+
+   20 expr: identifier .
+
+    $default  reduce using rule 20 (expr)
+
+
+state 25
+
+   21 expr: litteral .
+
+    $default  reduce using rule 21 (expr)
+
+
+state 26
+
+   18 expr: binary_expr .
+
+    $default  reduce using rule 18 (expr)
+
+
+state 27
+
+   19 expr: unary_expr .
+
+    $default  reduce using rule 19 (expr)
+
+
+state 28
+
+   15 stmt: tIF expr . tBEGIN stmt_list tEND
+   16     | tIF expr . tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tBEGIN      shift, and go to state 52
+
+
+state 29
+
+   17 stmt: tWHILE expr . tBEGIN stmt_list tEND
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tBEGIN      shift, and go to state 53
+
+
+state 30
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 31
+
+    4 var_dec_list: var_dec_list var_dec .
+
+    $default  reduce using rule 4 (var_dec_list)
+
+
+state 32
+
+    2 mini: var_dec_list stmt_list .
+   10 stmt_list: stmt_list . stmt
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+
+    $default  reduce using rule 2 (mini)
+
+    stmt        go to state 33
+    identifier  go to state 13
+
+
+state 33
+
+   10 stmt_list: stmt_list stmt .
+
+    $default  reduce using rule 10 (stmt_list)
+
+
+state 34
+
+   14 stmt: identifier tASSIGN . expr tSEMICOLON
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 54
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 35
+
+    6 var_dec: tVARDECL identifier tTINTEGER . tASSIGN expr tSEMICOLON
+
+    tASSIGN  shift, and go to state 55
+
+
+state 36
+
+    7 var_dec: tVARDECL identifier tTFLOAT . tASSIGN expr tSEMICOLON
+
+    tASSIGN  shift, and go to state 56
+
+
+state 37
+
+    8 var_dec: tVARDECL identifier tTBOOLEAN . tASSIGN expr tSEMICOLON
+
+    tASSIGN  shift, and go to state 57
+
+
+state 38
+
+    9 var_dec: tVARDECL identifier tTSTRING . tASSIGN expr tSEMICOLON
+
+    tASSIGN  shift, and go to state 58
+
+
+state 39
+
+   12 stmt: tREAD identifier tSEMICOLON .
+
+    $default  reduce using rule 12 (stmt)
+
+
+state 40
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+   37 unary_expr: tMINUS expr .
+
+    tTIMES  shift, and go to state 45
+    tDIV    shift, and go to state 46
+
+    $default  reduce using rule 37 (unary_expr)
+
+
+state 41
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+   36 unary_expr: tNEGATE expr .
+
+    $default  reduce using rule 36 (unary_expr)
+
+
+state 42
+
+   22 expr: '(' expr . ')'
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    ')'         shift, and go to state 59
+
+
+state 43
+
+   28 binary_expr: expr tPLUS . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 60
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 44
+
+   29 binary_expr: expr tMINUS . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 61
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 45
+
+   30 binary_expr: expr tTIMES . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 62
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 46
+
+   31 binary_expr: expr tDIV . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 63
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 47
+
+   32 binary_expr: expr tEQUALS . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 64
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 48
+
+   33 binary_expr: expr tNOTEQUALS . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 65
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 49
+
+   34 binary_expr: expr tAND . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 66
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 50
+
+   35 binary_expr: expr tOR . expr
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 67
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 51
+
+   13 stmt: tPRINT expr tSEMICOLON .
+
+    $default  reduce using rule 13 (stmt)
+
+
+state 52
+
+   15 stmt: tIF expr tBEGIN . stmt_list tEND
+   16     | tIF expr tBEGIN . stmt_list tEND tELSE tBEGIN stmt_list tEND
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+
+    stmt_list   go to state 68
+    stmt        go to state 12
+    identifier  go to state 13
+
+
+state 53
+
+   17 stmt: tWHILE expr tBEGIN . stmt_list tEND
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+
+    stmt_list   go to state 69
+    stmt        go to state 12
+    identifier  go to state 13
+
+
+state 54
+
+   14 stmt: identifier tASSIGN expr . tSEMICOLON
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tSEMICOLON  shift, and go to state 70
+
+
+state 55
+
+    6 var_dec: tVARDECL identifier tTINTEGER tASSIGN . expr tSEMICOLON
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 71
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 56
+
+    7 var_dec: tVARDECL identifier tTFLOAT tASSIGN . expr tSEMICOLON
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 72
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 57
+
+    8 var_dec: tVARDECL identifier tTBOOLEAN tASSIGN . expr tSEMICOLON
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 73
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 58
+
+    9 var_dec: tVARDECL identifier tTSTRING tASSIGN . expr tSEMICOLON
+
+    tINTEGER     shift, and go to state 16
+    tBOOLEAN     shift, and go to state 17
+    tFLOAT       shift, and go to state 18
+    tSTRING      shift, and go to state 19
+    tIDENTIFIER  shift, and go to state 1
+    tMINUS       shift, and go to state 20
+    tNEGATE      shift, and go to state 21
+    '('          shift, and go to state 22
+
+    expr         go to state 74
+    identifier   go to state 24
+    litteral     go to state 25
+    binary_expr  go to state 26
+    unary_expr   go to state 27
+
+
+state 59
+
+   22 expr: '(' expr ')' .
+
+    $default  reduce using rule 22 (expr)
+
+
+state 60
+
+   28 binary_expr: expr . tPLUS expr
+   28            | expr tPLUS expr .
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tTIMES  shift, and go to state 45
+    tDIV    shift, and go to state 46
+
+    $default  reduce using rule 28 (binary_expr)
+
+
+state 61
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   29            | expr tMINUS expr .
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tTIMES  shift, and go to state 45
+    tDIV    shift, and go to state 46
+
+    $default  reduce using rule 29 (binary_expr)
+
+
+state 62
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   30            | expr tTIMES expr .
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    $default  reduce using rule 30 (binary_expr)
+
+
+state 63
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   31            | expr tDIV expr .
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    $default  reduce using rule 31 (binary_expr)
+
+
+state 64
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   32            | expr tEQUALS expr .
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS   shift, and go to state 43
+    tMINUS  shift, and go to state 44
+    tTIMES  shift, and go to state 45
+    tDIV    shift, and go to state 46
+
+    $default  reduce using rule 32 (binary_expr)
+
+
+state 65
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   33            | expr tNOTEQUALS expr .
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS   shift, and go to state 43
+    tMINUS  shift, and go to state 44
+    tTIMES  shift, and go to state 45
+    tDIV    shift, and go to state 46
+
+    $default  reduce using rule 33 (binary_expr)
+
+
+state 66
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   34            | expr tAND expr .
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+
+    $default  reduce using rule 34 (binary_expr)
+
+
+state 67
+
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+   35            | expr tOR expr .
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+
+    $default  reduce using rule 35 (binary_expr)
+
+
+state 68
+
+   10 stmt_list: stmt_list . stmt
+   15 stmt: tIF expr tBEGIN stmt_list . tEND
+   16     | tIF expr tBEGIN stmt_list . tEND tELSE tBEGIN stmt_list tEND
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+    tEND         shift, and go to state 75
+
+    stmt        go to state 33
+    identifier  go to state 13
+
+
+state 69
+
+   10 stmt_list: stmt_list . stmt
+   17 stmt: tWHILE expr tBEGIN stmt_list . tEND
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+    tEND         shift, and go to state 76
+
+    stmt        go to state 33
+    identifier  go to state 13
+
+
+state 70
+
+   14 stmt: identifier tASSIGN expr tSEMICOLON .
+
+    $default  reduce using rule 14 (stmt)
+
+
+state 71
+
+    6 var_dec: tVARDECL identifier tTINTEGER tASSIGN expr . tSEMICOLON
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tSEMICOLON  shift, and go to state 77
+
+
+state 72
+
+    7 var_dec: tVARDECL identifier tTFLOAT tASSIGN expr . tSEMICOLON
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tSEMICOLON  shift, and go to state 78
+
+
+state 73
+
+    8 var_dec: tVARDECL identifier tTBOOLEAN tASSIGN expr . tSEMICOLON
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tSEMICOLON  shift, and go to state 79
+
+
+state 74
+
+    9 var_dec: tVARDECL identifier tTSTRING tASSIGN expr . tSEMICOLON
+   28 binary_expr: expr . tPLUS expr
+   29            | expr . tMINUS expr
+   30            | expr . tTIMES expr
+   31            | expr . tDIV expr
+   32            | expr . tEQUALS expr
+   33            | expr . tNOTEQUALS expr
+   34            | expr . tAND expr
+   35            | expr . tOR expr
+
+    tPLUS       shift, and go to state 43
+    tMINUS      shift, and go to state 44
+    tTIMES      shift, and go to state 45
+    tDIV        shift, and go to state 46
+    tEQUALS     shift, and go to state 47
+    tNOTEQUALS  shift, and go to state 48
+    tAND        shift, and go to state 49
+    tOR         shift, and go to state 50
+    tSEMICOLON  shift, and go to state 80
+
+
+state 75
+
+   15 stmt: tIF expr tBEGIN stmt_list tEND .
+   16     | tIF expr tBEGIN stmt_list tEND . tELSE tBEGIN stmt_list tEND
+
+    tELSE  shift, and go to state 81
+
+    $default  reduce using rule 15 (stmt)
+
+
+state 76
+
+   17 stmt: tWHILE expr tBEGIN stmt_list tEND .
+
+    $default  reduce using rule 17 (stmt)
+
+
+state 77
+
+    6 var_dec: tVARDECL identifier tTINTEGER tASSIGN expr tSEMICOLON .
+
+    $default  reduce using rule 6 (var_dec)
+
+
+state 78
+
+    7 var_dec: tVARDECL identifier tTFLOAT tASSIGN expr tSEMICOLON .
+
+    $default  reduce using rule 7 (var_dec)
+
+
+state 79
+
+    8 var_dec: tVARDECL identifier tTBOOLEAN tASSIGN expr tSEMICOLON .
+
+    $default  reduce using rule 8 (var_dec)
+
+
+state 80
+
+    9 var_dec: tVARDECL identifier tTSTRING tASSIGN expr tSEMICOLON .
+
+    $default  reduce using rule 9 (var_dec)
+
+
+state 81
+
+   16 stmt: tIF expr tBEGIN stmt_list tEND tELSE . tBEGIN stmt_list tEND
+
+    tBEGIN  shift, and go to state 82
+
+
+state 82
+
+   16 stmt: tIF expr tBEGIN stmt_list tEND tELSE tBEGIN . stmt_list tEND
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+
+    stmt_list   go to state 83
+    stmt        go to state 12
+    identifier  go to state 13
+
+
+state 83
+
+   10 stmt_list: stmt_list . stmt
+   16 stmt: tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list . tEND
+
+    tIDENTIFIER  shift, and go to state 1
+    tREAD        shift, and go to state 3
+    tPRINT       shift, and go to state 4
+    tIF          shift, and go to state 5
+    tWHILE       shift, and go to state 6
+    tEND         shift, and go to state 84
+
+    stmt        go to state 33
+    identifier  go to state 13
+
+
+state 84
+
+   16 stmt: tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND .
+
+    $default  reduce using rule 16 (stmt)

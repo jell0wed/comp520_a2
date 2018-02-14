@@ -58,18 +58,15 @@
      tAND = 274,
      tOR = 275,
      tNEGATE = 276,
-     tNOT = 277,
-     tREAD = 278,
-     tPRINT = 279,
-     tASSIGN = 280,
-     tIF = 281,
-     tELSE = 282,
-     tWHILE = 283,
-     tLPAREN = 284,
-     tRPAREN = 285,
-     tBEGIN = 286,
-     tEND = 287,
-     tSEMICOLON = 288
+     tREAD = 277,
+     tPRINT = 278,
+     tASSIGN = 279,
+     tIF = 280,
+     tELSE = 281,
+     tWHILE = 282,
+     tBEGIN = 283,
+     tEND = 284,
+     tSEMICOLON = 285
    };
 #endif
 /* Tokens.  */
@@ -92,18 +89,15 @@
 #define tAND 274
 #define tOR 275
 #define tNEGATE 276
-#define tNOT 277
-#define tREAD 278
-#define tPRINT 279
-#define tASSIGN 280
-#define tIF 281
-#define tELSE 282
-#define tWHILE 283
-#define tLPAREN 284
-#define tRPAREN 285
-#define tBEGIN 286
-#define tEND 287
-#define tSEMICOLON 288
+#define tREAD 277
+#define tPRINT 278
+#define tASSIGN 279
+#define tIF 280
+#define tELSE 281
+#define tWHILE 282
+#define tBEGIN 283
+#define tEND 284
+#define tSEMICOLON 285
 
 
 
@@ -125,7 +119,7 @@ typedef union YYSTYPE
 	struct PROGRAM *program;
 }
 /* Line 1529 of yacc.c.  */
-#line 129 "mini.tab.h"
+#line 123 "mini.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

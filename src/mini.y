@@ -37,9 +37,8 @@ PROGRAM *root;
 %token tTINTEGER tTFLOAT tTBOOLEAN tTSTRING // type declarations 
 %token tVARDECL								// variable declaration
 %token tPLUS tMINUS tTIMES tDIV tEQUALS tNOTEQUALS tAND tOR	// binary expressions
-%token tNEGATE tNOT							// unary expression
+%token tNEGATE 								// unary expression
 %token tREAD tPRINT tASSIGN tIF tELSE tWHILE // statements
-%token tLPAREN tRPAREN						// parenthesis
 %token tBEGIN tEND							// statement block
 %token tSEMICOLON							// end of line
 
@@ -53,7 +52,7 @@ PROGRAM *root;
 %left tEQUALS tNOTEQUALS
 %left tPLUS tMINUS
 %left tTIMES tDIV
-%left tNEGATE tNOT
+%left tNEGATE
 
 %%
 program: mini { root = $1; }
@@ -83,7 +82,6 @@ stmt:
 	  tREAD identifier tSEMICOLON { $$ = makeSTATEMENT_readStatement($2, @1.first_line); }
 	| tPRINT expr tSEMICOLON { $$ = makeSTATEMENT_printStatement($2, @1.first_line); }
 	| identifier tASSIGN expr tSEMICOLON { $$ = makeSTATEMENT_assignmentStatement($1 , $3, @1.first_line); }
-	| identifier tASSIGN litteral tSEMICOLON { $$ = makeSTATEMENT_assignmentStatement($1 , $3, @1.first_line); }
 	| tIF expr tBEGIN stmt_list tEND { $$ = makeSTATEMENT_ifElseStatement($2, $4, 0, @1.first_line); }
 	| tIF expr tBEGIN stmt_list tEND tELSE tBEGIN stmt_list tEND { $$ = makeSTATEMENT_ifElseStatement($2, $4, $8, @1.first_line); }
 	| tWHILE expr tBEGIN stmt_list tEND { $$ = makeSTATEMENT_whileStatement($2, $4, @1.first_line); }
@@ -97,9 +95,7 @@ expr:
 	| '(' expr ')' { $$ = $2; }
 ;
 
-identifier:
-	| tIDENTIFIER { $$ = makeEXP_identifier($1, @1.first_line); }
-;
+identifier: tIDENTIFIER { $$ = makeEXP_identifier($1, @1.first_line); } ;
 
 litteral:
 	  tINTEGER  { $$ = makeEXP_intLiteral($1, @1.first_line); } 
